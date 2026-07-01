@@ -2713,6 +2713,7 @@ function saveModal(){
     };
   }
 
+  saveData();
   applyFilters();buildCharts();renderKPIs();
   const t=document.getElementById('toast');
   t.classList.add('show');
@@ -3694,6 +3695,7 @@ function changeEstado(id, val){
   pushUndo();
   var _prevEst=p.estado;
   p.estado = val;
+  saveData();
   logChange('—',p.id,'🔄 Estado',(_prevEst||'?')+' → '+val);
   // Update select style
   var sel = document.getElementById('sel-est-'+id);
@@ -4042,6 +4044,7 @@ function startObsEdit(e, id, el){
   function save(){
     pushUndo();
     p.obs = ta.value;
+    saveData();
     var span = document.createElement('span');
     span.className='cell-edit obs-preview';
     span.style.cssText='font-size:10px;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;min-width:160px;max-width:240px;line-height:1.5;white-space:normal';
