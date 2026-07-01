@@ -3951,7 +3951,7 @@ function startCellEdit(e, id, field, el){
         p.fecha_prev = tdFromISO(_adjD.toISOString().slice(0,10));
       }
     }
-    // Sync codigo when id changes (code format: {base}{oldId}_{rest}, e.g. "1001_25_PR_...")asddd
+    // Sync codigo when id changes (code format: {base}{oldId}_{rest}, e.g. "1001_25_PR_...")
     if(field === 'id' && p.codigo){
       var underPos = p.codigo.indexOf('_');
       if(underPos > 0){
