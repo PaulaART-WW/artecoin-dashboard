@@ -10527,7 +10527,7 @@ function _mun_autoFillProvincia(id,municipio){
     let changed=false;
     if(!c.provincia||c.provincia.trim()===''){c.provincia=match[0];changed=true;}
     if(!c.ccaa||c.ccaa.trim()===''){c.ccaa=match[1];changed=true;}
-    if(changed){saveData();_mun_applyFilters();}
+    if(changed){_saveAgendaData();_mun_applyFilters();}
   }
 }
 
@@ -10546,14 +10546,14 @@ function histUndo(){
   redoStack.push(JSON.stringify(data));
   data=JSON.parse(undoStack.pop());
   nextId=Math.max(200,...data.map(d=>d.id))+1;
-  saveData();_mun_populateProvinceFilter();_mun_applyFilters();updateHistButtons();
+  _saveAgendaData();_mun_populateProvinceFilter();_mun_applyFilters();updateHistButtons();
 }
 function histRedo(){
   if(!redoStack.length)return;
   undoStack.push(JSON.stringify(data));
   data=JSON.parse(redoStack.pop());
   nextId=Math.max(200,...data.map(d=>d.id))+1;
-  saveData();_mun_populateProvinceFilter();_mun_applyFilters();updateHistButtons();
+  _saveAgendaData();_mun_populateProvinceFilter();_mun_applyFilters();updateHistButtons();
 }
 function updateHistButtons(){
   const u=document.getElementById('btnUndo');const r=document.getElementById('btnRedo');
@@ -10585,7 +10585,7 @@ function _mun_deleteSelected(){
   if(!confirm(\`¿Eliminar \${selectedIds.size} contacto(s) seleccionado(s)?\`))return;
   histPush();
   data=data.filter(d=>!selectedIds.has(d.id));
-  selectedIds.clear();saveData();_mun_populateProvinceFilter();_mun_applyFilters();updateDeleteSelBtn();
+  selectedIds.clear();_saveAgendaData();_mun_populateProvinceFilter();_mun_applyFilters();updateDeleteSelBtn();
 }
 function lookupMunicipioData(mun){
   if(!mun)return null;
@@ -10626,8 +10626,8 @@ function quickSetField(id,field,val){
         if(!c.ccaa||c.ccaa.trim()===''){c.ccaa=match[1];}
       }
     }
-    saveData();updateHistButtons();_mun_applyFilters();
-  }else{saveData();updateHistButtons();}
+    _saveAgendaData();updateHistButtons();_mun_applyFilters();
+  }else{_saveAgendaData();updateHistButtons();}
 }
 
 const _sbHeaders={'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY,'Content-Type':'application/json'};
@@ -10675,13 +10675,13 @@ function mergeNewDefaults(){
     data=data.concat(JSON.parse(JSON.stringify(toAdd)));
     const maxId=Math.max.apply(null,data.map(function(x){return x.id;}));
     nextId=maxId+1;
-    saveData();
+    _saveAgendaData();
   }
 }
 
 
 let _saveTimer=null;
-function saveData(){
+function _saveAgendaData(){
   localStorage.setItem('artecoin_agenda_v4',JSON.stringify(data));
   if(_sbConfigured()){
     clearTimeout(_saveTimer);
@@ -11273,7 +11273,7 @@ function applyAllOCR(){
     return;
   }
 
-  saveData();_mun_populateProvinceFilter();_mun_applyFilters();
+  _saveAgendaData();_mun_populateProvinceFilter();_mun_applyFilters();
   if(leafletMap){refreshMapMarkers();renderCCAAStats();}
   _mun_closeModal();
 
@@ -11300,7 +11300,7 @@ function registrarLlamada(id){
   if(!c.llamadas)c.llamadas=[];
   c.llamadas.push({fecha,hora:hora.trim(),nota:nota.trim()});
   c.ultimoContacto=fecha;
-  saveData();updateHistButtons();_mun_applyFilters();
+  _saveAgendaData();updateHistButtons();_mun_applyFilters();
   if(detailId===id)openDetail(id);
 }
 function editLlamada(id,idx){
@@ -11313,7 +11313,7 @@ function editLlamada(id,idx){
   histPush();
   c.llamadas[idx].nota=nota.trim();
   c.llamadas[idx].hora=hora.trim();
-  saveData();updateHistButtons();
+  _saveAgendaData();updateHistButtons();
   if(detailId===id)openDetail(id);
 }
 function deleteLlamada(id,idx){
@@ -11322,7 +11322,7 @@ function deleteLlamada(id,idx){
   histPush();
   c.llamadas.splice(idx,1);
   c.ultimoContacto=c.llamadas.length?c.llamadas.reduce((m,l)=>l.fecha>m?l.fecha:m,''):'';
-  saveData();updateHistButtons();_mun_applyFilters();
+  _saveAgendaData();updateHistButtons();_mun_applyFilters();
   if(detailId===id)openDetail(id);
 }
 
@@ -11421,13 +11421,13 @@ function saveContact(){
   const c={id:editId||nextId++,agenda:g('fAgenda')||'ED',valido:g('fValido')||'SI',municipio:mun,provincia:prov,ccaa:ccaaVal,contacto:g('fContacto'),cargo:g('fCargo'),email:g('fEmail'),email2:g('fEmail2'),movil:formatPhone(g('fMovil')),movil2:formatPhone(g('fMovil2')),fijo:formatPhone(g('fFijo')),extension:g('fExtension'),proyecto:g('fProyecto'),tipo:g('fTipo'),fase:g('fFase'),ultimoContacto:g('fUltimoContacto'),observaciones:g('fObservaciones'),llamadas:prev&&prev.llamadas?prev.llamadas:[],proyectosColab:prev&&prev.proyectosColab?prev.proyectosColab:[]};
   histPush();
   if(editId){const i=data.findIndex(d=>d.id===editId);if(i>=0)data[i]=c;}else{data.push(c);}
-  saveData();_mun_closeModal();_mun_populateProvinceFilter();_mun_applyFilters();
+  _saveAgendaData();_mun_closeModal();_mun_populateProvinceFilter();_mun_applyFilters();
   if(leafletMap){refreshMapMarkers();renderCCAAStats();}
 }
 function deleteContact(){
   if(!editId||!confirm('¿Eliminar este contacto?'))return;
   histPush();
-  data=data.filter(d=>d.id!==editId);saveData();_mun_closeModal();_mun_populateProvinceFilter();_mun_applyFilters();
+  data=data.filter(d=>d.id!==editId);_saveAgendaData();_mun_closeModal();_mun_populateProvinceFilter();_mun_applyFilters();
   if(leafletMap){refreshMapMarkers();renderCCAAStats();}
 }
 
@@ -11525,7 +11525,7 @@ function tipoComboFilter(inp){
 }
 function tipoComboSelect(id,val,el){
   const c=data.find(x=>x.id===id);
-  if(c){ c.tipo=val; saveData(); }
+  if(c){ c.tipo=val; _saveAgendaData(); }
   const btn=document.querySelector('#tipoCombo_'+id+' .tipo-combo-btn');
   if(btn){ btn.innerHTML=(val||'<span style="color:var(--text-light)">—</span>')+'<span class="tc-arrow">▾</span>'; }
   const drop=document.querySelector('#tipoCombo_'+id+' .tipo-combo-drop');
