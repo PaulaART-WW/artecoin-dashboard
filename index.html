@@ -423,6 +423,8 @@ thead th{cursor:grab;}
 <header>
   <div><div class="brand">ARTECOIN <span>PMO · Gestión de Proyectos</span></div></div>
   <div style="display:flex;align-items:center;gap:12px">
+    <button id="btn-undo-g" onclick="undoAction()" title="Deshacer (Ctrl+Z)" disabled style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:8px;padding:5px 10px;font-size:12px;font-weight:600;cursor:pointer;opacity:.4">↩ Deshacer</button>
+    <button id="btn-redo-g" onclick="redoAction()" title="Rehacer (Ctrl+Y)" disabled style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:8px;padding:5px 10px;font-size:12px;font-weight:600;cursor:pointer;opacity:.4">↪ Rehacer</button>
     <button id="btn-historial" onclick="openHistorial()" title="Ver cambios de esta sesión" style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:8px;padding:5px 12px;font-size:12px;font-weight:600;cursor:pointer">
       🕐 Historial<span id="hist-badge" class="hist-badge"></span>
     </button>
@@ -499,8 +501,7 @@ thead th{cursor:grab;}
       <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 10px 4px;background:#fff;border-radius:10px 10px 0 0;border-bottom:1px solid var(--border)">
         <div style="display:flex;gap:7px;align-items:center">
           <button type="button" class="btn" onclick="openAddProject()" style="background:#1A56DB;color:#fff;font-size:12px;padding:4px 11px">➕ Añadir</button>
-          <button class="btn" id="btn-undo" onclick="undoAction()" style="font-size:12px;padding:4px 11px">↩ Deshacer</button>
-          <button class="btn" id="btn-redo" onclick="redoAction()" style="font-size:12px;padding:4px 11px">↪ Rehacer</button>
+
           <button class="btn" id="btn-delete" onclick="deleteSelected()" style="background:#C0392B;color:#fff;font-size:12px;padding:4px 11px;display:none">🗑️ Eliminar</button>
         </div>
         <button class="col-reset-btn" onclick="resetColOrder()" title="Restablecer columnas">↺ Restablecer columnas</button>
@@ -576,8 +577,7 @@ thead th{cursor:grab;}
 <div class="tab-panel" id="tab-docs">
   <br>
   <div class="docs-filter-row">
-    <button class="btn" onclick="undoAction()" style="font-size:12px;padding:4px 11px">↩ Deshacer</button>
-    <button class="btn" onclick="redoAction()" style="font-size:12px;padding:4px 11px">↪ Rehacer</button>
+
     <span class="flabel">Área</span>
     <select id="dArea" onchange="renderDocs()">
       <option value="">Todas las áreas</option>
@@ -628,8 +628,7 @@ thead th{cursor:grab;}
 <!-- ══ CENTROS PD ══════════════════════════════════════════════════════════ -->
 <div class="tab-panel" id="tab-centros">
   <div class="docs-filter-row" style="flex-wrap:wrap;gap:8px;align-items:center">
-    <button class="btn" onclick="undoAction()" style="font-size:12px;padding:4px 11px">↩ Deshacer</button>
-    <button class="btn" onclick="redoAction()" style="font-size:12px;padding:4px 11px">↪ Rehacer</button>
+
     <span class="flabel">Proyecto PD</span>
     <select id="ctr-selector" onchange="renderCentros()" style="min-width:280px;max-width:500px;font-size:12px;padding:5px 8px;border:1.5px solid #C8D9EF;border-radius:6px"></select>
     <button onclick="abrirAddCentro()" style="margin-left:8px;background:#1A56DB;color:#fff;border:none;border-radius:6px;padding:5px 13px;font-size:12px;font-weight:600;cursor:pointer">+ Añadir centro</button>
@@ -1520,7 +1519,7 @@ thead th{cursor:grab;}
 </div>
 
 <script>
-var _DASH_VER="v15-supabase-only";
+var _DASH_VER="v23-supabase-full";
 let DATA = [{"id":1,"codigo":"1001_25_PR_AP_ESEP_IBIZA CARRETERAS","ano":25,"nombre":"IBIZA CARRETERAS","provincia":"BALEARES","estado":"FINALIZADO","obs":"PDNT FISO: TC 17/02  FP: 14/03  FE:01/04\n*07/04 - RESPONDEN CN LAS INCIDENCIAS EN AP\n*01/04 - ESPERANDO RESPUESTA DEL CORREO DE CANALIZACIONES Y CABLEADO. YA PUEDEN HACERSE ESTUDIOS.\n*24/03 - CONTESTA DICE QUE RECOPILANDO DATOS\n*17/03 - JOSE CONTESTA EL 14/03 QUE LA SEMANA QUE VIENE NOS LO ENVIA","tipo1":"AP","tipo2":"ESEP","firma":"JF","f_inicio":"20/12/2024","sol_docs":["10/02/2025","24/03/2025"],"inversion":1228148.27,"area":"AP_PD","empresa":"ARTECOIN","persona":"Juan Francisco García","ap_puntos":1022,"ap_cm":41,"ap_secciones":251,"ap_marca_lum":"PHILIPS"},{"id":2,"codigo":"1002_25_PR_AP_ESEP_SAN BARTOLOME DE TIRAJANA","ano":25,"nombre":"SAN BARTOLOME DE TIRAJANA","provincia":"LAS PALMAS","estado":"FINALIZADO","obs":"PDNT FISO: TC 20/01  FE:10/03 \n*23/07 - REUNIÓN CON EQUIPO TECNICO AYTO: Modificaciones a realizar tras la reunión del 23/07/2025\nPrincipalmente, las zonas se reducen a las siguientes actuaciones:\n1.\tResort y Starlight: Marca mayoritaria de Philips, con las siguientes particularidades:\na.\tResort: Las tipo globo, semiesféricas, troncocónicas, villas se sustituirán por Carandini -century.\nEn las Avenidas Alejandro del Castillo y Francisco Vega Ronroy se plantea el modelo de luminaria RIVARA de SCHREDER, incluido cambio de soporte.\nb.\tStarlight: Faroles villa se sustituirán por la STYLAGE\n2.\tResto de zonas: Se intentará unificar marcas y modelos, en su mayoría TECEO, HAPILED Y/O TOPIA.\nZonas deportivas: Se incluirá un sistema de telegestión particular, al estilo de las instalaciones deportivas de Villalbilla.\nZona primera línea de playa: Todas las luminarias localizadas en estas zonas deberán contar con telegestión punto a punto.\n*10/06 - INCLUIR PREST\n*28/05 - IGP HABLAR CON IGP PARA PODER SEGUIR\n*01/04 - JAVI CON ESTUDIOS,ZONA RESORT PARA TRAT DATOS\n*24/03 - 164 CON CUPS / 190 ANTEPYT /220 TOMA DATOS NO ESTAN CLAROS CM. INTRO INVT Y HACER CATÁLOGO IGP,JAVI\n*17/03 - ZONIFICADO, PNDT HACER DIVISION CATALOGO\n*10/03 - ENTREGAN INFO QUE FALTABA EL 07/03\n*07/03 - FISOTEC ENTREGA LA 1 PARTE, REVISADO POR IGP FALTAN FOTOS Y ARCHIVOS CAD, PEDIDOS POR TEAMS\n*03/03 - LOLI PREGUNTA ENTREGA DE DATOS POR TEAMS, NOS RESPONDES QUE EL 05/03\n*14/02 - REUNION: RECORDATORIO DE CRIBAR INFO QUE NOS LLEGA DE FISOTEC\n*08/01 - LA CONTABILIDAD DE ED AL FINAL N0 VA A SER NECESARIO INSTALACIÓN FV, PARA ALUMBRADO SI\n*07/01 - PAULA REALIZA EL ANALISIS DE LA CONTABILIDAD DE CONSUMOS (REDACTADO EN DOCUMENTO ENVIADO A JF), Y SE PUEDE REALIZAR LA FV\n*20/12 - ALBERTO NOS ENVIA FACTURACION DE 2023 (YA QUE LOS CONSUMOS QUE HAY EN EL ANTE PROYECTO SON DEL 2016)\n*03/12 - NOS RESPONDE A LA SOL DE DOC (CONTACTO: ALBERTO AZCÁRATE / RESPONSABLE DEL CONTRATO 619115737) NOS MANDAN PARTE DE LA DOCUMENTACIÓN REGISTRADO EN EL EXCEL DE SOL DOC, ESTAMOS PDNT DE RECIBIR MÁS DOC\n*02/12 - HECHA LA SOLICITUD DE DOC PDNT LOLI\n*26/11 - ME COMENTA LOLI POR  TEAMS QUE VA A ENTRAR ESTE PYT PERO HASTA QUE NO ME DIGAN ALGO MÁS NO HACER NADA","tipo1":"AP","tipo2":"ESEP","firma":"JF","f_inicio":"03/12/2024","sol_docs":["26/11/2024"],"inversion":24028754.98,"area":"AP_PD","empresa":"ARTECOIN","persona":"Juan Francisco García","ap_puntos":14753,"ap_cm":203,"ap_secciones":4227,"ap_marca_lum":"MIX"},{"id":3,"codigo":"1003_25_PR_AP_PREST_TORRE-PACHECO","ano":25,"nombre":"TORRE-PACHECO","provincia":"MURCIA","estado":"FINALIZADO","obs":"INFO: QUIEREN SACAR LA LICITACIÓN POR LOTES (3 LOTES)\n*11/02 - REDACTADO PDNT RELLENAR LO RELACIONADO CON PREST Y REV JJE PREST CON JF\n*05/02 - ESTUDIOS FINALIZADOS. PDNT DE REDACCIÓN\n*21/01 - REALIZANDO ESTUDIOS QUE ESTAN CASI TERMINADOS\n*13/01 -JAVI ANALIZANDO ESTADO DE LOS CIRCUITOS\n*08/01 - DISPONEMOS DE UN INVENTARIO ANTIGUO QUE SE ESTA TRATANDO","tipo1":"AP","tipo2":"PREST","firma":"JF","f_inicio":"08/01/2025","sol_docs":[],"inversion":1820803.47,"area":"AP","empresa":"ARTECOIN","persona":"Juan Francisco García","ap_puntos":2280,"ap_cm":29,"ap_secciones":553,"ap_marca_lum":"SOCELEC"},{"id":4,"codigo":"1004_25_PR_AP_ESE_PEÑARANDA DE BRACAMONTE","ano":25,"nombre":"PEÑARANDA DE BRACAMONTE","provincia":"SALAMANCA","estado":"FINALIZADO","obs":"PDNT FISO: TC 10/03  FP: 12/03  FE: 14/03\n*22/04 - PDT DE INCLUIR PLANOS Y ENTREGAR\n*31/03 - PAULA ESTUDIOS (PDT SOPORTES E INCLUIR PL NUEVOS)\n*24/03 - INTRO INVT Y HACER CATALOGO PAULA\n*12/03 - POR HACER CONTABILIDAD\n*16/01 - FELIX RESPONDE ENVIANDO DOCUMENTACIÓN , PERO NO SIRVE PORQUE SON AUDIT DEL 2016\n*08/01 - AVANZAR CONTABILIDAD PEDIDA A FELIX PERO NO HA CONTESTADO\n*07/01  - PDNT DE TRABJO DE FISOTEC\n*12/12 - SE LE COMUNICA FISOTEC QUE VAN A TENER QUE IR","tipo1":"AP","tipo2":"ESE","firma":"JF","f_inicio":"05/02/2025","sol_docs":["05/02/2025","17/02/2025","21/02/2025"],"inversion":1693327.83,"area":"AP","empresa":"ARTECOIN","persona":"Juan Francisco García","ap_puntos":1904,"ap_cm":34,"ap_secciones":512,"ap_marca_lum":"IDLUX"},{"id":5,"codigo":"1005_25_PR_DUS5000_FV_SERÒS","ano":25,"nombre":"SERÒS","provincia":"LERIDA","estado":"FINALIZADO","obs":"*10/03 - REV PPT, PNDT PLANOS\n*07/03 - PREST FINALIZADO\n*14/02 - ENVIAMOS SOLICITUD DE CALCULO ESTC, SURGE UN PROBLEMA DE LIMITACION EN KW EN LA INST FV DEL CEMENT\n*11/02 - MODIFICACIONES PLANOS, MODIFICACIONES ISI ESQ UNIFILARES, ROBER SE PONE EN CONTACTO (RICARDO) PARA EL CALCU LINEA MT Y SELEC TIPO TRANSF\n*10/02 - VISITA ROBER SEROS\n*05/02 - CALCULANDO \n*23/01 - COMUNICA LOLI QUE ESTA FIRMADO","tipo1":"DUS5000","tipo2":"FV","firma":"LETTER","f_inicio":"03/02/2025","sol_docs":[],"inversion":749582.21,"area":"FV","empresa":"LETTER","persona":"—"},{"id":6,"codigo":"1006_25_PR_ED_ESE_IBIZA","ano":25,"nombre":"IBIZA","provincia":"BALEARES","estado":"FINALIZADO","obs":"*01/07 - FALTA POR METER C50, SACAR LOS DATOS DE INDIVA\n*28/05 - PDNT DE INTRO DATOS G4 Y REALIZAR MODIFICACIONES PLANOS\n*22/04 - PNDT ENVIO FACTURAS GAS\n*24/03 - CONTESTA DICE QUE RECOPILANDO DATOS\n*03/03 - CONFIRMADO\n*21/01 - ENVIA POR EL GRUPO EL LISTADO DE EDIFICIOS\n*20/12 - COMUNICO ESTE TRABAJO A FISOTEC Y ENVIO UN KMZ Y UN ENLACE CON LA INFORMACIÓN. EL 31/12 ME RESPONDEN QUE SE LES HA CADUCADO EL ENLACE, LO VUELVO A ENVIAR A LA VUELTA DE VACACIONES 07/01\n*29/11 - AUIDTORIA DE LAS INSTALACIONES ELECTRICAS DE LA RED DE CARRETERAS","tipo1":"ED","tipo2":"ESE","firma":"JF","f_inicio":"10/03/2026","sol_docs":["17/03/2026","24/03/2026"],"inversion":9434812.47,"area":"ED_AUD","empresa":"ARTECOIN","persona":"Juan Francisco García"},{"id":7,"codigo":"1007_25_PR_AP_ESEP_UTIEL","ano":25,"nombre":"UTIEL","provincia":"VALENCIA","estado":"FINALIZADO","obs":"(PE 12 M)\n*28/05 - IGP TRATA FINAL\n*20/03 - CORREO PIDIENDO RELACION CM\n*11/03 - ENVIAN CONTABILIDAD Y DOC\n*03/03 - ROBER NOS DICE QUE NO LLAMEMOS\n*11/02 - REENVIA SOLIDOC ROBER\n*28/01 - SOLIDOC ROBER\n*24/01 - SOLII AUDITORIA PREVIA DEL 2021. YA SOLICITADA\n*21/01 - EN LA REUNION REALIZADA COMENTAN NO TRABAJAR HASTA NUEVO AVISO","tipo1":"AP","tipo2":"ESEP","firma":"ROBER","f_inicio":"11/03/2025","sol_docs":["28/01/2024","11/02/2025","11/03/2025","20/03/2025"],"inversion":3670105.14,"area":"AP_PD","empresa":"ROBER","persona":"Roberto Rodrigo","ap_puntos":4304,"ap_cm":54,"ap_secciones":1271,"ap_marca_lum":"SIN MARCA"},{"id":9,"codigo":"1009_25_PR_ED_ESE_COLMENAR VIEJO","ano":25,"nombre":"COLMENAR VIEJO","provincia":"MADRID","estado":"FINALIZADO","obs":"FE: 31/03  (PE 3 MESES)\n*09/03 - PDT CORREGIR MATRIZ PRIORIZACION\n*01/07 - INVT TRATADO, PDNT DE PLANTILLA JF PARA AVANZAR\n*17/03 - TC FISOTEC:  HOY SE DESPLAZARAN A COLMERNAR, PERO COMENZARAN MAÑANA. EL TECNICO TIENE RECONOCIMIENTO MEDICO.\n*12/03 - CONTABILIDAD ELECTRICIDAD HECHA. POR HACER CONTABILIDAD GAS\n*03/03 - SONIN COMIENZAN EL TRABAJO DE CAMPO, ME COMENTAN QUE TODO CORRECTO SEGÚN LA PLANIFICACION, ASISTEN FINALMENTE A LAS 13H AL MUSEO\n*14/02 - EN LA REUNION CON ROBER LE DAN LAS CLAVES DE LA WEB FACTURACION, CONTABILIDAD HECHA POR JF, REDACTADO INFORME DE CRITERIOS DE EXCLUSION CONSUMO Y COSTE  MENOR 10.000\n*07/02 - NOS ENVIAN CONTACTOS DE CADA EDIF\n*05/02 - UNA VEZ TENGAMOS INFO REALIZAR CONTABILIDAD\n*24/01 - MANDAR CORREO TIPO A COLMENAR PARA LOS EDIFICIOS\n*21/01 - EN LA REUNION REALIZADA COMENTAN NO TRABAJAR HASTA NUEVO AVISO, GEOLOCALIZADOS LOS EDIFICIOS EN KMZ","tipo1":"ED","tipo2":"ESE","firma":"JF","f_inicio":"05/02/2025","sol_docs":["5-feb.","11-feb.","20/02/2026"],"inversion":6888768.34,"area":"ED_AUD","empresa":"ARTECOIN","persona":"Juan Francisco García"},{"id":10,"codigo":"10010_25_PR_AP_ESEP_JIMENA","ano":25,"nombre":"JIMENA","provincia":"CÁDIZ","estado":"FINALIZADO","obs":"PDNT FISO: TC 03/03  FP: 11/03  FE: 11/03\n*01/04 - PREGUNTAR POR LA INVERSION DE CABLEADO/ LISTADO DE SMART\n*31/03 - JAVI CON ESTUDIOS\n*24/03 - DUDA CM. SE PUEDE HACER CONTABILIDAD\n*17/03 - EN LA REUNION SE COMENTA AÑADIR FV (SIMILAR A BAENA, + INFO CONTACTAR CON FELIX)\n*14/03 - LLAMA JAVI , LE DICE QUE FALTA QUE CONTESTE EL AYT\n*05/03 - LLAMA JAVI, LE COMENTAN QUE NO LES HA LLEGADO Y SE LO REENVIA A EL Y A ALCALDIA\n*14/02 - ENVIO SOLIDOC","tipo1":"AP","tipo2":"ESEP","firma":"INGENIA","f_inicio":"14/02/2025","sol_docs":["14/02/2025","20/02/2025","05/03/2025","10/03/2025","19/03/2025"],"inversion":1915077.42,"area":"AP_PD","empresa":"INGENIA","persona":"Oliver Chamorro","ap_puntos":1820,"ap_cm":36,"ap_secciones":591,"ap_marca_lum":"MOONOFF\nPERO SIN MARCA"},{"id":11,"codigo":"10011_25_PR_AP_ESEP_ALCAUDETE","ano":25,"nombre":"ALCAUDETE","provincia":"JAÉN","estado":"FINALIZADO","obs":"PDNT FISO: TC 13/03  FP: 14/03  FE: 14/04\n*28/05 - PDNT DE RED Y PRESUP JJE Y AA\n*19/05 - NOS ENVIA FISOTEC EL INVT ACUTALIZADO CON LAS CAMBIOS QUE ENCONTRARON EN EL LED\n*06/05 - EN PROCESO DE REDACCION\n*30/04 - REALIZANDO ESTUDIOS\n*24/03 - NO CONTESTAN A LOS CORREOS SOLO A LAS LLAMADAS\n*21/03 - NOS ENVIA LAS CLAVES Y DICEN QUE EL RESTO DE INFO MAS ADELANTE\n*14/03 - LLAMA JAVI Y LE DICEN QUE NOS VAN A ENTREGAR LAS CLAVES DE FACTURAS\n*24/01 -  (PE: 4  MES)\n*05/03 - LLAMA JAVI LE COMENTA QUE ESTA RECOPILANDO LA INFO Y QUE LE VA A MANDAR LAS CLAVES","tipo1":"AP","tipo2":"ESEP","firma":"JF","f_inicio":"13/02/2025","sol_docs":["13/02/2025","20/02/2025","05/03/2025","11/03/2025","19/05/2025"],"inversion":3642289.73,"area":"AP_PD","empresa":"ARTECOIN","persona":"Juan Francisco García","ap_puntos":4203,"ap_cm":50,"ap_secciones":992,"ap_marca_lum":"PHILIPS"},{"id":12,"codigo":"10012_25_PR_ED_ED_PEÑARANDA DE BRACAMONTE","ano":25,"nombre":"PEÑARANDA DE BRACAMONTE","provincia":"SALAMANCA","estado":"FINALIZADO","obs":"<<<","tipo1":"ED","tipo2":"ED","firma":"JF","f_inicio":"05/05/2025","sol_docs":["10/03/2026","01/04/2026","14/05/2026"],"inversion":2069105.14,"area":"ED_ARQ","empresa":"ARTECOIN","persona":"Juan Francisco García"},{"id":13,"codigo":"10013_25_PR_AP_ESE_COLMENAR VIEJO","ano":25,"nombre":"COLMENAR VIEJO","provincia":"MADRID","estado":"FINALIZADO","obs":"PDNT FISO: TC 24/03  FP: SEMANA 21 FE:05/02\n*28/05 - IGP TRATA FINAL + PHV INTRO PTU NUEVOS\n*06/05 - TRAT INICIAL IGP\n*01/04 - CONTABILIDAD HECHA. PDNT ENTREGA FISO\n*12/03 - CONTABILIDAD ELECTRICIDAD HECHA. POR HACER CONTABILIDAD GAS","tipo1":"AP","tipo2":"ESE","firma":"JF","f_inicio":"05/02/2025","sol_docs":["05/02/2025","11/02/2025","20/02/2025","10/03/2025"],"inversion":9509977.91,"area":"AP","empresa":"ARTECOIN","persona":"Juan Francisco García","ap_puntos":9616,"ap_cm":134,"ap_secciones":2543,"ap_marca_lum":"SOCELEC / ARTESOLAR"},{"id":18,"codigo":"10018_25_PR_ED_ESE_LOS PEDROCHES","ano":25,"nombre":"LOS PEDROCHES","provincia":"CÓRDOBA","estado":"FINALIZADO","obs":"*12/09 - ENTREGA PARCIAL LOS PEDROCHES (-Memorias valoradas, Proyectos básicos , Proyectos de ejecución de las actuaciones de alumbrado, iluminación y fotovoltaica.)\n*01/09 - JF EXTERNALIZA AP Y FV. PVG SIGUE CON SUS ACTUACIONES.\n*29/08 - REUNION EN LA QUE SE DISTRIBUYEN LAS DISITINTAS TAREAS A REALIZAR EN OFI\n*11/07 - HAY REUNION\n*01/07 - PATRI NOS COMENTA QUE ALMUDENA SE VA A REUNIR POR VIDEO LLAMADA JUEVES Y VIERNES CON LA COORD PARA DEFINIR EL ALCANCE\n*10/06 - COMENTAMOS EN LA REUNION QUE VUELVA A PEDIR LA DOCUMENTACION","tipo1":"ED","tipo2":"ESE","firma":"JF","f_inicio":"24/04/2025","sol_docs":["24/04/2026","06/06/2026"],"inversion":403195.28,"area":"ED_AUD","empresa":"ARTECOIN","persona":"Juan Francisco García"},{"id":20,"codigo":"10020_25_PR_ED_ESE_MIRAFLORES DE LA SIERRA","ano":25,"nombre":"MIRAFLORES DE LA SIERRA","provincia":"MADRID","estado":"FINALIZADO","obs":"OJO! SOLO CONTACTO CON PROLICITACION\n-04/11 - LOLI ME COMENTA QUE VA SIN FIRMA EL DOCUMENTO\n*27/10 - LE REENVIO EL ENLACE A LOS BORRADORES DE AE PORQUE SE LE HA CADUCADO EL ENLACE ANTERIOR\n*01/07 - PATRI COMENTA QUE NO VA A SER NECESARIO HACER CE3X\n*30/05 (09:58) - LLAMO A SARA Y ME CONTESYA AL CORREO QUE ENVIO EL 29/05, CONFIRMAMOS LOS EDIFICIOS OBJETO DE AUDITORIA Y QUEDO PDNT DE QUE ME ENVIE ALGUNAS REF CATASTRALES, PLANOS Y LAS NUEVAS CREDENCIALES DE IBERDROLA\n*06/05 - RESPONDE  ENVIAN DOCUMENTACION","tipo1":"ED","tipo2":"ESE","firma":"PROLICITACION - SF","f_inicio":"03/03/2025","sol_docs":["03/03/2026","03/03/2026","10/03/2026"],"inversion":1347180.3,"area":"ED_AUD","empresa":"PROLICITACION","persona":"—"},{"id":21,"codigo":"10021_25_PR_AP_ESEP_ÁVILA","ano":25,"nombre":"ÁVILA","provincia":"ÁVILA","estado":"EN CURSO","obs":"(PE 10 M) (23 CM 14963 PL 22 MM)\n*08/01 - REUNION JF COMENTA QUE HAY QUE ARREGLAR LAS MMLL Y REHACER PRESU , INCLUIR PARTIDAS PRA HACER LA RENOVACION COMPLETA, LED QUE NO SE CAMBIABA AHORA SE CAMBIA.\n*08/07 - TRAS TENER JF UNA REUNION CON ELLOS, CAMBIAN BASTANTES DATOS DEL INVENTARIO.\n*01/07 - PNDT TRAT IGP, ALFONSO YA HA TERMINADO LOS UNIFILARES FALTARIA LOS PLANOS DE FIAO RED + PRESU\n*10/06 - NO HEMOS PEDIDO AUN DOC PQ ESTAMOS PDNT DE QUE JF NO ENVIE SI HA CONSEGUIDO LA FACTURACION YA TRATADA\n*26/05 - RECIBIMOS LOS PLANOS UBI CM","tipo1":"AP","tipo2":"ESEP","firma":"JF","f_inicio":"26/05/2025","sol_docs":["11/06/2025"],"inversion":20448654.11,"area":"AP_PD","empresa":"ARTECOIN","persona":"Juan Francisco García","ap_puntos":18081,"ap_cm":250,"ap_secciones":4545,"ap_marca_lum":"PHILIPS / SOCELEC / IGUZZINI"},{"id":22,"codigo":"10022_25_PR_AP_ESEP_SAN ROQUE","ano":25,"nombre":"SAN ROQUE","provincia":"CÁDIZ","estado":"STAND BY","obs":"FORMATO IGUAL JIMENA\n*08/01 - LOS DATOS DE CONSUMO REFLEJADOS EN ESTA TABLA HACEN REFERENCIA A LOS DE GENWEB (2023) LOS CUALES SE DIFERENCIAN MUCHO DE LOS DE LA AUDITORIA DE 2022, Y CUYOS DATOS QUEDARON DESCARTADOS EN CORREOS ANTERIORES\n*14/07 - COMENTO A JF QUE LA FACTURACION QUE NOS HAN ENVIADO SON LOS CONSUMOS TOTALES, (ESTO NO NOS SIRVEN) PERO ME DICE QUE NO PIDA MAS DOCUMENTACION\n*09/07 - NOS ENVIAN FACTURACION ACTUALIZADA\n*30/06 - NOS ENVIAN DOCUMENTACION JF POR WASAP\n*10/06 - NO SABEMOS QUE SI SERÁ NECESARIO QUE FISO ACTUALICE LA INFO DEL 2022 QUE TENEMOS","tipo1":"AP","tipo2":"ESEP","firma":"AG","f_inicio":"03/06/2025","sol_docs":["03/06/2025"],"inversion":null,"area":"AP_PD","empresa":"AG","persona":"—","ap_marca_lum":"SIN MARCA"},{"id":23,"codigo":"10023_25_PR_AP_SENCILLO_CORDOBA LOTE 2","ano":25,"nombre":"CORDOBA LOTE 2","provincia":"CÓRDOBA","estado":"FINALIZADO","obs":"(PE 3 MESES)\n*01/07 - ESTAMOS PDNT DE RECIBIR LOS ESTUDIOS QUE HEMOS ENVIADO QUE HAGAN EXTERNOS, JAVI VUELVE A PEDIRLOS 30/06 RESPUESTA: A FINALES DE ESTA SEMANA SIN FALTA.\n*10/06 - IGP Y JJE COMENTAN QUE NO ES NECESARIA LA CONTAB, SINO QUE CON EL PRECIO DEL DOC MEMORIA QUE NOS TIENEN QUE ENVIAR ES SUFICIENTE. IGP SE ENCARGA DE PEDIR LA MEMORIA. RESPUESTA: NOS COMENTAN QUE NO HAY MEMORIA QUE NOS DIRAN ELLOS LA INFORMACION QUE NECESITEMOS\n*03/06 - SI (DOS GIS CON INVENTARIO DE PL Y CM)\n*28/05 - FIRMADO EL 07/05","tipo1":"AP","tipo2":"SENCILLO","firma":"JF","f_inicio":"07/05/2025","sol_docs":["07/05/2025","10/06/2025"],"inversion":747750.49,"area":"AP","empresa":"ARTECOIN","persona":"Juan Francisco García","ap_puntos":500,"ap_cm":27,"ap_secciones":253,"ap_marca_lum":"PHILIPS/SIMON"},{"id":24,"codigo":"10024_25_PR_AP_ESEP_CERDEDO","ano":25,"nombre":"CERDEDO","provincia":"PONTEVEDRA","estado":"FINALIZADO","obs":"(PE 2 M)\n*12/09 - PEDIDOS PLANOS A FISO Y ALEX\n*08/07 - JOSE COMENTA QUE EXISTE UNA DIFERENCIA DE 700 PTUS ENTRE LA TOMA DE DATOS Y LA AUDITORIA QUE LE DIMOS, A PESAR DE HABER REVISADO TODOS LOS CM. POR TANTO ESTO RETRASARA LA ENTREGA, HASTA EL DIA 10/07 NO SE PUEDEN JUNTAR CON EL TECNICO PQ ESTA DE VACACIONES, EN CASO DE QUE SEA NECESARIO DEBERAN VOLVER.\n*10/06 - ENVIADA DOC A JOSE FISO\n*28/05 - FIRMADO EL 26/05","tipo1":"AP","tipo2":"ESEP","firma":"JF","f_inicio":"30/05/2025","sol_docs":["06/06/2025"],"inversion":3894579.82,"area":"AP_PD","empresa":"ARTECOIN","persona":"Juan Francisco García","ap_puntos":5285,"ap_cm":142,"ap_secciones":2212,"ap_marca_lum":"SIN MARCA"},{"id":26,"codigo":"10026_25_PR_ED_AE_VALDEMORILLO","ano":25,"nombre":"VALDEMORILLO","provincia":"MADRID","estado":"FINALIZADO","obs":"*04/11 - LOLI ME COMENTA DE PEDIR LA FIRMA PARA INCLUIRLA EN LA REDACCIÓN\n*27/08 - VUELVO A PEDIR LAS FACTURAS DE GAS Y GASOIL ME DICE QUE NOS LAS ENVIARAN EL 01/09\n*22/08 - VUELVO A PEDIR LAS FACTURAS DE GAS Y GASOIL\n*15/07- NOS ENVIAN LAS REF Y UN  PLANO\n*14/07 - ALFONSO HABLA CON PAZ LA CUAL COMENTA QUE ESTA AGOBIADA POR LA CANT DE INFO QUE NCESITAMOS, PERO QUEDAMOS CON ELLA EN QUE VAMOS A HACER MAS SENCILLA LA ENTREdA DE LA INFO, PIDIENDOLE SOLO LO SIGUIENTE: REF CATASTRALES+TIPOS DE SUMINISTROS, PLANOS (NORMALES O DE EVACUACION, LAS FACTURAS NOS COMENTA QUE NOS DARA LAS CREDENCIALES.\n*09/07- FINALMENTE NOS HACEMOS CARGO NOSOTROS DEL CONTACTO CON VALDEMORILLO, ENVIO CORREO SOL DOC CON GMAIL CREADO PARA LAG INGENIEROS \n*08/07 - LLAMO AGUSTIN ME COMENTA QUE EL AYT NO TIENE PREDISPOSICION A MANDARNOS NADA QUE DICEN QUE ESTAN MUY LIADOS COMO PARA RECOPILAR LA INFO. AGUSTIN TAMBIEN COMENTA QUE ESTA LIADO CON OTROS TEMAS QUE SINO PODEMOS LLMAR NOSOTROS, Y QUE QUIEREN UN CONTACTO PREVIO Y QUE YA DE PASO APROVECHEMOS PARA VER LOS EDIFICIOS.","tipo1":"ED","tipo2":"AE","firma":"LAG INGENIEROS- AGUSTIN","f_inicio":"30/06/2025","sol_docs":["30-jul.","8-jul.","10/07/2026","14/07/2026","22/08/2026","27/08/2026"],"inversion":1176456.95,"area":"ED_AUD","empresa":"LAG INGENIEROS","persona":"Agustín López de Ayala"},{"id":29,"codigo":"10029_25_PR_AP_SENCILLO_MAZARRÓN","ano":25,"nombre":"MAZARRÓN","provincia":"MURCIA","estado":"FINALIZADO","obs":"PONER QUE TIPO DE PYT ES EN LA CARPETA","tipo1":"AP","tipo2":"SENCILLO","firma":"INGENIA","f_inicio":"15/09/2025","sol_docs":[],"inversion":13385443.52,"area":"AP","empresa":"INGENIA","persona":"Oliver Chamorro","ap_puntos":12631,"ap_cm":222,"ap_secciones":3899,"ap_marca_lum":"SIN MARCA"},{"id":30,"codigo":"10030_25_PR_ED (PD)_ESE_LA ESTRADA","ano":25,"nombre":"LA ESTRADA","provincia":"PONTEVEDRA","estado":"FINALIZADO","obs":"*01/09 - LLAMA RAMON CONFIRMAMOS CON EL UNA REUNION EL MIERCOLES PARA REUNIRNOS CON EL EQUIPO ENCARGADO EN EL AYT DE ENVIARNOS LA DOCUMENTACION","tipo1":"ED (PD)","tipo2":"ESE","firma":"JF","f_inicio":"01/09/2025","sol_docs":["21-ago.","10-sep.","17/09/2026"],"inversion":2044724.2,"area":"ED_AUD","empresa":"ARTECOIN","persona":"Juan Francisco García"},{"id":32,"codigo":"10032_25_PR_AP_PREST_VALMOJADO","ano":25,"nombre":"VALMOJADO","provincia":"TOLEDO","estado":"FINALIZADO","obs":"FE 15 OCT","tipo1":"AP","tipo2":"PREST","firma":"JF","f_inicio":"15/09/2025","sol_docs":[],"inversion":924025.53,"area":"AP","empresa":"ARTECOIN","persona":"Juan Francisco García","ap_puntos":1335,"ap_cm":29,"ap_secciones":556,"ap_marca_lum":"PRILUX"},{"id":33,"codigo":"10033_25_PR_AP_PREST_JUMILLA","ano":25,"nombre":"JUMILLA","provincia":"MURCIA","estado":"FINALIZADO","obs":"FE 15 OCT","tipo1":"AP","tipo2":"PREST","firma":"DS CONSULTORES","f_inicio":"15/09/2025","sol_docs":[],"inversion":4501739.34,"area":"AP","empresa":"DS CONSULTORES","persona":"—","ap_puntos":5870,"ap_cm":64,"ap_secciones":1478,"ap_marca_lum":"PRILUX / BENITO / SOCELEC"},{"id":34,"codigo":"10034_25_PR_AP_ESEP_AYAMONTE","ano":25,"nombre":"AYAMONTE","provincia":"HUELVA","estado":"FINALIZADO","obs":"*07/01 - EN AZUL CONSUMO E PORQUE ES NUMERO ESTIMADO YA QUE SOLO TENEMOS VALOR DE COSTE. ME COMENTA JAVI QUE YA NO HACE FALTA QUE VUELVA A PEDIR INFO PARA SACAR LA CONTA\n*19/12 - REENVIO EL CORREO 03/12 PIDIENDO LA CONTABILIDAD CON EL COSTE \n*25/09 - ME COMENTA JF POR WASAP QUE ENVIE EL CORREO DE SOLICITUD DE DOC, AUNQUE ME ENVIA PARTE DE DOCUMENTACION POR CORREO\n*09/12 - FALTA QUE NOS MANDEN COSTES DE FACTURAS PARA AJUSTAR TEC-ECO","tipo1":"AP","tipo2":"ESEP","firma":"AG","f_inicio":"25/09/2025","sol_docs":["25/09/2026"],"inversion":7409738.26,"area":"AP_PD","empresa":"AG","persona":"—","ap_puntos":7633,"ap_cm":107,"ap_secciones":1772,"ap_marca_lum":"SIN  MARCA"},{"id":36,"codigo":"10036_25_PR_ED_ESE_GRANADA SEDE JUDICIAL EDIFICIO DEL CUBO","ano":25,"nombre":"GRANADA SEDE JUDICIAL EDIFICIO DEL CUBO","provincia":"GRANADA","estado":"FINALIZADO","obs":"*23/12 - SE ENVIA EL PYT DE NUEVO MODIFICADO CON LO QUE SE INDICA EN LA SUBSANACION\n*15/12 - ENVIAN ALGUNOS CONCEPTOS QUE HAY QUE SUBSANAR","tipo1":"ED","tipo2":"ESE","firma":"JF","f_inicio":"23/09/2025","sol_docs":["29/09/2026"],"inversion":2108610.93,"area":"ED_AUD","empresa":"ARTECOIN","persona":"Juan Francisco García"},{"id":37,"codigo":"10037_25_PR_AP_ORM_VALLADOLID_CASTILLOS","ano":25,"nombre":"VALLADOLID_CASTILLOS","provincia":"VALLADOLID","estado":"FINALIZADO","obs":"PE 21 DIAS A PARTIR DE FIRMA \n*30/09- TRABAJANDO JAVI, CASTILLOS DE TRIGUEROS DEL VALLE, MONTEALEGRE, TORRELOBATÓN, ENCINAS DE ESGUEVA, PORTILLO, SAN PEDRO LATARCE Y VILLAGARCIA DE CAMPOS, FUENSALDAÑA, TIEDRA Y VILLAFUERTE.","tipo1":"AP","tipo2":"ORM","firma":"JF","f_inicio":"23/09/2025","sol_docs":[],"inversion":164290.0,"area":"AP","empresa":"ARTECOIN","persona":"Juan Francisco García","ap_marca_lum":"PHILIPS"},{"id":39,"codigo":"10039_25_PR_ED_ESE_VILLANUEVA DE LA CAÑADA","ano":25,"nombre":"VILLANUEVA DE LA CAÑADA","provincia":"MADRID","estado":"FINALIZADO","obs":"*12/12 - ENVIO CORREO DE ACTUALIZACION DE ESTADO DEL PYT \n*02/10 - SONINGEO NOS ENVIA LA PLAFINIFICACION PREVISTA DE 27 AL 30 OCTUBRE\n*09/10 - NOS CONFIRMAN QUE PODEMOS ENVIAR EL CORREO COMO ARTECOIN","tipo1":"ED","tipo2":"ESE","firma":"S2ENERGY","f_inicio":"02/10/2025","sol_docs":["9-oct.","22-oct."],"inversion":null,"area":"ED_AUD","empresa":"S2E ENERGY","persona":"Luis Vilariño"},{"id":40,"codigo":"10040_25_PR_ED_ED_ROTA","ano":25,"nombre":"ROTA","provincia":"CÁDIZ","estado":"EN CURSO","obs":"*20/06 - EN LA REU MANTENIDA SE COMENTA QUE ESTA PDT DE UNA REU PRESENCIAL CON ELLOS\n*09/10 - ENVIAN AE Y EXCEL CONTA CON CONSUMO/COSTE","tipo1":"ED","tipo2":"ED","firma":"CCG","f_inicio":"07/10/2025","sol_docs":["13-oct.","19-dic."],"inversion":null,"area":"ED_ARQ","empresa":"CCG","persona":"—"},{"id":41,"codigo":"10041_25_PR_AP_ESE_ROTA","ano":25,"nombre":"ROTA","provincia":"CÁDIZ","estado":"FINALIZADO","obs":"*06/02 - SE AJUSTAN CONSUMOS Y COSTES A LA CONTABILIDAD DEFINITIVA\n*09/01 - SE DA POR TERMINADO LA DOCUMENTACIÓN Y SE QUEDA EN STAND BY A FALTA DE QUE JUANFRAN SE REUNA EN PERSONA CON EL CLIENTE\n*09/10 - NOS ENVIA PLANOS Y RELACION DE CUPS CON CONSUMO/COSTE PERO NO CON CM, PERO SI PLANO CON UBI CM Y PL\n*09/10 - JUAN OBSEO NOS ENVIA INFO (UNA AUDITORIA PREVIA)","tipo1":"AP","tipo2":"ESE","firma":"CCG","f_inicio":"08/10/2025","sol_docs":["08/10/2026","19/12/2026"],"inversion":4097600.0,"area":"AP","empresa":"CCG","persona":"—","ap_puntos":7572,"ap_cm":114,"ap_secciones":2103,"ap_marca_lum":"PRILUX CIEGO"},{"id":42,"codigo":"10042_25_PR_AP_ORM_CUENCA MOYA","ano":25,"nombre":"CUENCA MOYA","provincia":"CUENCA","estado":"FINALIZADO","obs":"MOYA : PE 1 MES\nREDACCION PYT Y COORD SS \n*18/09 - MOYA (RESTAURACION DEL AMULLARAMIENTO ESTE, MEJORA DE ACCESOS, INST DE ILU EN EL RECINTO FORTIFICADO DE MOYA) SOTERRAMIENTO DE LINEA ELECTRICA E ILUM EFICIENTE.\nLOLI ME COMENTA QUE MÁS ADELANTE ENTRARA TAMBIEN CAÑETE (ILUM EFICIENTE DE  LA MURALLA). TAMBIÉN COMENTA QUE SE ENCARGARA UN ING DE JAEN SEGURAMENTE","tipo1":"AP","tipo2":"ORM","firma":"JF","f_inicio":"18/09/2025","sol_docs":[],"inversion":81339.61,"area":"AP","empresa":"ARTECOIN","persona":"Juan Francisco García","ap_marca_lum":"SIN MARCA"},{"id":43,"codigo":"10043_25_PR_AP_ORM_CUENCA CAÑETE","ano":25,"nombre":"CUENCA CAÑETE","provincia":"CUENCA","estado":"FINALIZADO","obs":"*25/09 - REDACCION PROYECTO, DIRECCIÓN FACULTATIVA Y COORD SS OBRAS DE RESTAURACION INTEGRAL MURALLA LATERAL E INST ILU EFICIENTE SIST FORTIFICADO DE CAÑETE DE SOSTENIBILIDAD VALLE DEL CABRIEL, RESERVA DE LA BIOSFERA, FINANCIADO CON FONDOS NEXTGENERATION","tipo1":"AP","tipo2":"ORM","firma":"JF","f_inicio":"18/09/2025","sol_docs":[],"inversion":50000.0,"area":"AP","empresa":"ARTECOIN","persona":"Juan Francisco García","ap_marca_lum":"PRILUX"},{"id":44,"codigo":"10044_25_PR_AP_SENCILLO_SEGOVIA","ano":25,"nombre":"SEGOVIA","provincia":"SEGOVIA","estado":"FINALIZADO","obs":"","tipo1":"AP","tipo2":"SENCILLO","firma":"SINCEO 2","f_inicio":"27/10/2025","sol_docs":[],"inversion":9949680.29,"area":"AP","empresa":"SINCEO","persona":"—","ap_puntos":8223,"ap_cm":192,"ap_secciones":2666,"ap_marca_lum":"SIN MARCA"},{"id":45,"codigo":"10045_25_PR_AP_SENCILLO_CALPE LUMINARIAS SOLARES","ano":25,"nombre":"CALPE LUMINARIAS SOLARES","provincia":"ALICANTE","estado":"FINALIZADO","obs":"*22/12 - ENVIAN UN DOCUMENTO DE SUBSANACION CON ALGUNOS COMENTARIOS A CORREGIR\n*28/10 - VISITA EN CAMPO POR PARTE DE ROBER\n*05/11 - ENTREGA DE PROYECTO COMPLETO","tipo1":"AP","tipo2":"SENCILLO","firma":"JF","f_inicio":"03/11/2025","sol_docs":["28/10/2026"],"inversion":149614.49,"area":"AP","empresa":"ARTECOIN","persona":"Juan Francisco García","ap_puntos":"67 luminarias solares.","ap_marca_lum":"MOONOFF"},{"id":46,"codigo":"10046_25_PR_AP_ESE_MOS","ano":25,"nombre":"MOS","provincia":"PONTEVEDRA","estado":"FINALIZADO","obs":"*04/03 Línea base actualizada a 3.957.406 kWh/año, con coste de 776,720,01 € y ahorro de consumo de 68,7 %. Se han incluido las actuaciones de lugares de interes de MOONOFF\n*07/01 - SE COMENTA POR EL GRUPO WASAP : De Mos solo queda el AP, que ya probamos con las credenciales y no proporcionaban datos de consumo. Pero tenemos una auditoría de 2024 donde aparece el consumo y coste asociados a la P1. DATO AUDITORIA 2024: El consumo anual asciende a 3.945.984 Kwh. Precio de la Prestación P1 = 749.736 € + IVA\n*10/11 - LOLI REUNION NO TOCAR NADA DE MOMENTO AUNQUE HAYA LLEGADO LA DOCUMENTACION","tipo1":"AP","tipo2":"ESE","firma":"S2ENERGY","f_inicio":"30/10/2025","sol_docs":["30-oct."],"inversion":null,"area":"AP","empresa":"S2E ENERGY","persona":"Luis Vilariño","ap_puntos":7601,"ap_cm":161,"ap_secciones":3051,"ap_marca_lum":"MOONOFF"},{"id":47,"codigo":"10047_25_PR_ED_PD_ESE_MOS","ano":25,"nombre":"MOS","provincia":"PONTEVEDRA","estado":"FINALIZADO","obs":"*20/03 - ENVIADOS PLAN DIRECTOR AP Y ED , A LUIS S2EENERGY Y JF\n*20/11 - VAN A ESCANEAR EL PABELLON Y PISCINA (SE ESCANEA INTERIOR Y EXTERIOR Y ADEMAS SE HACEN FOTOS DE LOS CUADROS, CUBIERTA Y SALAS TECNICAS)\n*10/11 - LOLI REUNION NO TOCAR NADA DE MOMENTO AUNQUE HAYA LLEGADO LA DOCUMENTACION","tipo1":"ED_PD","tipo2":"ESE","firma":"S2ENERGY","f_inicio":"30/10/2025","sol_docs":["30-oct."],"inversion":2198882.55,"area":"ED_AUD","empresa":"S2E ENERGY","persona":"Luis Vilariño"},{"id":48,"codigo":"10048_25_PR_AP_ESEP_HUELVA (PUEBLOS)","ano":25,"nombre":"HUELVA (PUEBLOS)","provincia":"HUELVA","estado":"EN CURSO","obs":"(PE 5 M)\n*25/02 - TERMINAN TC FISO PERO NO ENVIAN ENTREGAS\n*08/01 - TODOS LOS DATOS COMPLETOS (SACAR VERGUENZAS DE LAS INSTALACIONES (MMLL, FOTOS CM Y FOTO POSTES)\n*08/10 - JAVI ENVIA SOL DOC Y DESPUES LE ENVIA ENLACE TEAMS\n*08/10 (TEAMS LOLI) - REVISION DE LOS MUNICIPIOS AGRUPADOS DE ALMONASTER LA REAL, CALA, CALAÑAS, EL CAMPILLO, CAMPOFRÍO, CHUCENA, JABUGO, PUEBLA DE GUZMÁM, VILLARRASA, Y LA ZARZA - EL PERRUNAL\nJAVI LES ENVIA UN CORREO SOL DOC QUE LE COMENTO JF Y ESTAMOS PDNT DE QUE NOS MANDEN UN CORREO GMAIL PARA QUE PODAMOS DARLES ACCESO A DRIVE\n03/12 - DOCUMENTACIÓN ENTREGADA Y CLASIFICADA DE LOS 10 MUNICIPIOS","tipo1":"AP","tipo2":"ESEP","firma":"JF","f_inicio":"23/09/2025","sol_docs":["08/10/2026"],"inversion":null,"area":"AP_PD","empresa":"ARTECOIN","persona":"Juan Francisco García","ap_marca_lum":"INST"},{"id":49,"codigo":"10049_25_PR_AP_ORM_OLIAS DEL REY","ano":25,"nombre":"OLIAS DEL REY","provincia":"TOLEDO","estado":"FINALIZADO","obs":"*28/10 ILU ORM EDIFICIOS Y PLAZA MUNICIPAL \n*05/11 DEFINICIÓN DE EDIFICIOS A ILUMINAR: AYUNTAMIENTO Y CENTRO SOCIAL (RGB) / IGLESIA 3000K / PLAZA MUNICIPAL (WASP) / FUENTES CON PROYECTORES RGB\n*05/12 ENTREGA DE TODOS LOS MODELOS 3D","tipo1":"AP","tipo2":"ORM","firma":"JF","f_inicio":"05/12/2025","sol_docs":[],"inversion":200049.94,"area":"AP","empresa":"ARTECOIN","persona":"Juan Francisco García","ap_puntos":86,"ap_cm":1,"ap_marca_lum":"PRILUX"},{"id":51,"codigo":"10051_25_PR_ED (PD)_ESE_VALDELAGUNA","ano":25,"nombre":"VALDELAGUNA","provincia":"MADRID","estado":"FINALIZADO","obs":"(PE 3 MES)\n*19/12 - CENTRO DE DIA (PROYECTO BÁSICO Y DE EJECUCÓN “ACONDICIONAMIENTO DE EDIFICIO DE VIVIENDAS PARA CENTRO DE USO SOCIAL” (MEMORIA+PLANOS)\nPROYECTO BÁSICO PARA AMPLIACIÓN DE CENTRO DE DÍA EN VALDELAGUNA, MADRID (MEMORIA+PLANOS)\nPPT) Y COLEGIO (CREO QUE HAY UNA MEMORIA VALORADA PERO NO LA HE VISTO)\n*01/10 - REDACCION DE PYT DE REMODELACIÓN Y ADQUISICION DE EQUIPAMIENTO NECESARIO PARA LA REFORMA DEL CENTRO DE DÍA DE VALDELAGUNA, AMPLIANDO LA RED DE CENTROS EXISTENTES Y SU DISPERSION TERRITORIAL EN LA COMUNIDAD, FINANCIADO POR LOS FONDOS","tipo1":"ED (PD)","tipo2":"ESE","firma":"PSS","f_inicio":"01/10/2025","sol_docs":[],"inversion":654862.9,"area":"ED_AUD","empresa":"PSS","persona":"—"},{"id":52,"codigo":"10052_25_PR_AP_SENCILLO_CARTAGENA","ano":25,"nombre":"CARTAGENA","provincia":"MURCIA","estado":"FINALIZADO","obs":"*25/02 - COMENTA JAVI QUE EL 11/02 SE ENTREGA A TODAS LAS EMPRESAS\n*12/11 - RECIBIMOS DOCUMENTACIÓN DE INVENTARIO, INCLUYENDO UNA CLASIFICACIÓN DE CALLES QUE HAY QUE MANTENER\n*12/11 - LOS ESTUDIOS SE TENDRÁN QUE REALIZAR CON DOS PROPUESTAS AL 100%, PRILUX Y SOCELEC\n*16/11 - SE TERMINAN LOS ESTUDIOS Y EL TRATAMIENTO DE DATOS DE AMBAS PROPUESTAS (SANDO Y VEOLIA)\n*03/12 - SE LANZAN NUEVOS MODELOS DE INFORMES PARA AMBAS PROPUESTAS","tipo1":"AP","tipo2":"SENCILLO","firma":"NA","f_inicio":"21/11/2025","sol_docs":[],"inversion":null,"area":"AP","empresa":"—","persona":"—","ap_secciones":15335,"ap_marca_lum":"PRILUX / SOCELEC"},{"id":53,"codigo":"10053_25_PR_AP_SENCILLO_RINCÓN DE LA VICTORIA","ano":25,"nombre":"RINCÓN DE LA VICTORIA","provincia":"MÁLAGA","estado":"FINALIZADO","obs":"*14/11 - TRAS UNA CLASIFICACION INICIAL DE LAS VIAS, NOS MANDAN LAS CLASIFICACION DEFINITIVA\n*03/12 - LA TEC ECO DE ROTA ESTA TERMINADA A FALTA DE REVISAR POSIBLES AJUSTES DE COSTES O CONSUMOS DE FACTURACION , LOS CUALES NO DISPONEMOS","tipo1":"AP","tipo2":"SENCILLO","firma":"NA","f_inicio":"17/11/2025","sol_docs":[],"inversion":9512836.9,"area":"AP","empresa":"—","persona":"—","ap_puntos":10131,"ap_cm":173,"ap_secciones":2783,"ap_marca_lum":"MOONOFF"},{"id":55,"codigo":"10055_25_PR_AP_ORM_CONSUEGRA","ano":25,"nombre":"CONSUEGRA","provincia":"TOLEDO","estado":"FINALIZADO","obs":"*29/10 - FUNDACION IMPULSA - CASTILLO Y MOLINOS\n*29/11 - MODELO 3D ENTREGADO POR FISOTEC","tipo1":"AP","tipo2":"ORM","firma":"JF","f_inicio":"28/10/2025","sol_docs":[],"inversion":1040469.83,"area":"AP","empresa":"ARTECOIN","persona":"Juan Francisco García","ap_puntos":236,"ap_cm":1,"ap_marca_lum":"PRILUX"},{"id":57,"codigo":"10057_25_PR_AP_ESEP_SOCOVOS","ano":25,"nombre":"SOCOVOS","provincia":"ALBACETE","estado":"FINALIZADO","obs":"*05/12 - SE EMPIEZAN LOS CÁLCULOS DEL PROYECTO\n*30/12 - LOS DATOS DE CONTABILIDAD QUE NOS PASÓ JF NO NOS VALEN, SE LO DIJIMOS Y DIJO QUE DEJARAMOS LA TEC ECO CON UN AHORRO SUPERIOR AL 30%","tipo1":"AP","tipo2":"ESEP","firma":"JF","f_inicio":"09/12/2025","sol_docs":["05/11/2026"],"inversion":1078291.19,"area":"AP_PD","empresa":"ARTECOIN","persona":"Juan Francisco García","ap_puntos":901,"ap_cm":9,"ap_secciones":445,"ap_marca_lum":"SIN MARCA"},{"id":58,"codigo":"10058_25_PR_AP_ORM_CASTILLO DE CUENCA","ano":25,"nombre":"CASTILLO DE CUENCA","provincia":"CUENCA","estado":"FINALIZADO","obs":"*03/12 - SE TERMINAN LOS ESTUDIOS DE DIALUX","tipo1":"AP","tipo2":"ORM","firma":"NA","f_inicio":"03/12/2025","sol_docs":[],"inversion":116730.67,"area":"AP","empresa":"—","persona":"—","ap_marca_lum":"VARIOS"},{"id":59,"codigo":"10059_25_PR_AP_ESE_LA ESTRADA","ano":25,"nombre":"LA ESTRADA","provincia":"PONTEVEDRA","estado":"INICIABLE","obs":"*03/03 - JF COMENTA QUE FISO NO TIENE QUE HACER EL INVENTARIO DE AP","tipo1":"AP","tipo2":"ESE","firma":"JF","f_inicio":"01/09/2025","sol_docs":["21-ago.","10-sep."],"inversion":null,"area":"AP","empresa":"ARTECOIN","persona":"Juan Francisco García"},{"id":60,"codigo":"10060_25_PR_AP_MMLL_ZARAGOZA","ano":25,"nombre":"ZARAGOZA","provincia":"ZARAGOZA","estado":"FINALIZADO","obs":"*09/12 - PAOLO DE LETTER NOS PROPORCIONA GIS DE LAS CALLES A MEDIR. EL PROYECTO CONSISTE EN REDACTAR UNA MEMORIA DONDE SE COMPAREN RESULTADOS LUMÍNICOS DE ESTUDIOS CON LAS SONDAS DEL VEHÍCULO","tipo1":"AP","tipo2":"MMLL","firma":"JF","f_inicio":"17/02/2025","sol_docs":[],"inversion":null,"area":"AP","empresa":"ARTECOIN","persona":"Juan Francisco García"},{"id":61,"codigo":"10061_25_PR_AP_MMLL_GRANADA","ano":25,"nombre":"GRANADA","provincia":"GRANADA","estado":"FINALIZADO","obs":"*09/02 - SE ENTREGA A ACEINSA TODA LA DOCUMENTACIÓN\n*04/02 - FISOTEC ENTREGA TODAS LAS MEDICIONES LUMINICAS TRATADAS\n*03/12 - EL PROYECTO CONSISTE EN REDACTAR UNA MEMORIA DONDE SE COMPAREN RESULTADOS LUMÍNICOS DE ESTUDIOS CON LAS SONDAS DEL VEHÍCULO","tipo1":"AP","tipo2":"MMLL","firma":"JF","f_inicio":"04/02/2025","sol_docs":[],"inversion":null,"area":"AP","empresa":"ARTECOIN","persona":"Juan Francisco García"},{"id":62,"codigo":"100_25_PR_AP_SENCILLO_CHIVA URBANIZACIONES","ano":25,"nombre":"CHIVA URBANIZACIONES","provincia":"VALENCIA","estado":"EN CURSO","obs":"*19/12 - JAVI COMENTA QUE LA CONTA HAY QUE HACERLA PERO ADAPTANDO LA QUE YA TENEMOS DE UN PLAN DIRECTOR PREVIO\n*15/11- REFORMA BAJA TENSION Y ELECTRICIDAD , SE TRASPASA A TONI\n*12/11 - SE COMENTA CON TONI QUE TIENEN QUE IR PARA REVISAR INSTALACIONES Y QUE HARÁN LOS CALCULOS ELECTRICOS","tipo1":"AP","tipo2":"SENCILLO","firma":"JF","f_inicio":"01/12/2025","sol_docs":[],"inversion":null,"area":"AP","empresa":"ARTECOIN","persona":"Juan Francisco García","ap_puntos":3560,"ap_cm":39,"ap_secciones":769,"ap_marca_lum":"SOCELEC"},{"id":63,"codigo":"1001_26_PR_AP_LEG_SEVILLA CARRIL BICI","ano":26,"nombre":"SEVILLA CARRIL BICI","provincia":"SEVILLA","estado":"FINALIZADO","obs":"*02/02- PROYECTO ELÉCTRICO DE NUEVA CANALIZACIÓN AÉREA Y SUBTERRÁNEA PARA EL CARRIL BICI DE SEVILLA\n*05/02 - ENTREGADO A MARSAN","tipo1":"AP","tipo2":"LEG","firma":"ARTECOIN","f_inicio":"30/01/2025","sol_docs":[],"inversion":655104.79,"area":"AP","empresa":"ARTECOIN","persona":"Juan Francisco García","ap_marca_lum":"SCHREDER"},{"id":64,"codigo":"1002_26_PR_AP_PREST_CÓRDOBA","ano":26,"nombre":"CÓRDOBA","provincia":"CÓRDOBA","estado":"EN CURSO","obs":"*04/03 Visto bueno de los estudios por parte del Ayto. Se han solicitado planos a FISO y ALEX. Se han solicitado estudios en DIALUX a PHILIPS para asegurar la licitación.\nFA: 20/01 (PE:2MESES)\n*21/01 - Redacción de proyectos técnicos de ejecución y dirección de obras para la renovación de instalaciones de alumbrado exterior en diversas zonas del municipio de Cordoba. LOTE 1: del DISTRITO PONIENTE NORTE: Barrio Las Palmeras, Barrio Electromecánicas, Barrio Miralbaida y Barrio San Rafael de la Albaida. Del DISTRITO SUR: Santa Isabel. Otras zonas: Huerta de Santa Isabel Oeste, Camino de Turruñuelos, Arruzafilla y El Patriarca.","tipo1":"AP","tipo2":"PREST","firma":"JF","f_inicio":"21/01/2025","sol_docs":[],"inversion":1585475.89,"area":"AP","empresa":"ARTECOIN","persona":"Juan Francisco García","ap_puntos":1563,"ap_cm":42,"ap_secciones":248,"ap_marca_lum":"PHILIPS"},{"id":65,"codigo":"1003_26_PR_AP_SENCILLO_HUELVA (CAPITAL)","ano":26,"nombre":"HUELVA (CAPITAL)","provincia":"HUELVA","estado":"FINALIZADO","obs":"","tipo1":"AP","tipo2":"SENCILLO","firma":"NA","f_inicio":"02/01/2025","sol_docs":[],"inversion":null,"area":"AP","empresa":"—","persona":"—","ap_puntos":20310,"ap_cm":291,"ap_secciones":4740,"ap_marca_lum":"MOONOFF/PHILIPS/HISPALED"},{"id":66,"codigo":"1004_26_PR_ED_AE-PD_MÁLAGA","ano":26,"nombre":"MÁLAGA","provincia":"MÁLAGA","estado":"EN CURSO","obs":"F.ADJ:20/12 (PE: PARCIALES 4 MESES / FINALES 6MESES)\n*26/02 - FACTURADOS ALGUNOS HITOS\n*05/02 - ENTREGABLES PARCIALES (20 ABRIL) / ENTREGABLES FINALES (20 JUNIO)\n*08/01 - LOLI TEAMS: Realización de anteproyectos energéticos en cuatro edificios municipales del Ayuntamiento de Málaga en el marco del proyecto europeo Pathways2Resilience. \n                 El objeto del contrato es la realización de anteproyectos energéticos detallados en cuatro edificios municipales seleccionados, con el fin de:\n                 Diagnosticar el desempeño energético actual y determinar las principales ineficiencias y puntos críticos de consumo en cada edificio.\n                 Diseñar medidas de mejora energética específicas, incluyendo la incorporación de soluciones tecnológicas que reduzcan el consumo energético y aumenten el uso de energías renovables.\n                 Apoyar los objetivos del proyecto Pathways2Resilience mediante la generación de recomendaciones prácticas que contribuyan a la resiliencia climática de Málaga, reforzando su papel como ciudad modelo en la transición energética.\n                 Facilitar la toma de decisiones estratégicas para la implementación de medidas energéticas que maximicen el impacto económico, social y ambiental en el ámbito municipal.\n                           - FYCMA - Palacio de Ferias y Congresos de Málaga — 60.000 m² — 3.439.482 kWh/año\n                           - Palacio de Deportes José María Martín Carpena — 22.000 m² — 1.106.683 kWh/año\n                           - C.E.I.P. Francisco de Quevedo — 4.000 m² — 98.628 kWh/año\n                           - Policía Local Jefatura Rosaleday y Territorial Centro — 5.000 m² — 184.580 kWh/año\n*10/12 - SONIN NOS RESPONDE CON ALGUNAS PREGUNTAS COMO: 4.¿Podremos realizar las visita en una misma semana? Podríamos realizar los trabajos de visita la semana del 12 al 16 de Enero.\n*02/12 - LOLI PIDE PRESU A SONIN PARA 4 CENTRO: PALACIO DE FERIAS Y CONGRESOS, PALACIO DEPORTES JOSE MARÍA MARTIN CARPENA , CEIP FRANCISCO QUEVEDO, POLICIA LOCAL.","tipo1":"ED","tipo2":"AE-PD","firma":"JF","f_inicio":"30/12/2025","sol_docs":["8-ene."],"inversion":7780809.76,"area":"ED_AUD","empresa":"ARTECOIN","persona":"Juan Francisco García"},{"id":67,"codigo":"1005_26_PR_ED_ED_FUENGIROLA","ano":26,"nombre":"FUENGIROLA","provincia":"MÁLAGA","estado":"EN CURSO","obs":"F.ADJU: 26/11 (PE: 35 DIAS)\n*08/01 - PRESUPUESTO PARTICULAR . ALEX ENVIAR LOS PLANOS CONFORME LOS TENGA HECHOS\n*22/12 - 3 COLEGIOS. INFO DE PARTIDA: PANEL DE CONCURSO. NO HAY MÁS INFORMACIÓN. \n*27/11 - COMENTADO POR TEAMS LOLI, ENTRADA PYT,  REDACCION DE PROYECTOS PARA RENOVACION INTEGRAL DE INSTALACIONES EN LOS COLEGIOS DEL AYT DE FUENGIROLA (EXPT 330/2025/CM)","tipo1":"ED","tipo2":"ED","firma":"JF/PSS","f_inicio":"01/01/2025","sol_docs":["05/12/2026"],"inversion":4152779.18,"area":"ED_ARQ","empresa":"ARTECOIN/PSS","persona":"JF + PSS"},{"id":68,"codigo":"1006_26_PR_ED_ED_MADRID FOGASA","ano":26,"nombre":"MADRID FOGASA","provincia":"MADRID","estado":"EN CURSO","obs":"F.ADJ: 30/12 F.FIRMA: 12/01 (20 DIAS)\n*27/02 - NOS ENVIAN INFO DE LAS SALAS DE CPDS PROYECTADAS PARA INCLUIRLAS EN LAS PROPUESTAS DE CLIMA QUE HAGAMOS\n*09/02 - NOS CONTESTAN CON ALGUNOS COMENTARIOS Y PROPUESTAS QUE DEBEMOS CORREGIR Y ENVIAR\n*05/02- PVG ENVIA EL PROYECTO BASICO\n*08/01 - LOLI TEAMS: OBJETO: “Servicio de redacción del proyecto básico y ejecución de \"Obras de Climatización y Renovación de aire en el edificio ubicado en la calle Arturo Soria 128A Madrid\", estudio básico de seguridad y salud, dirección facultativa y coordinación plan seguridad.”","tipo1":"ED","tipo2":"ED","firma":"JF","f_inicio":"30/12/2025","sol_docs":[],"inversion":null,"area":"ED_ARQ","empresa":"ARTECOIN","persona":"Juan Francisco García"},{"id":69,"codigo":"1007_26_PR_AP_BT_ALBACETE - PASEO FERIAL Y EJIDOS","ano":26,"nombre":"ALBACETE - PASEO FERIAL Y EJIDOS","provincia":"ALBACETE","estado":"EN CURSO","obs":"","tipo1":"AP","tipo2":"BT","firma":"JF","f_inicio":"","sol_docs":[],"inversion":null,"area":"AP","empresa":"ARTECOIN","persona":"Juan Francisco García"},{"id":8,"codigo":"1008_26_PR_AP_ESE_VILLANUEVA DE LA CAÑADA","ano":26,"nombre":"VILLANUEVA DE LA CAÑADA","provincia":"MADRID","estado":"INICIABLE","obs":"*05/05 - ES UNA ESE (AP+ED) PERO EL CORRESP. A ED ESTA EN 2025\n*26/02 - EN LA REU MANTENIDA JF COMENTA QUE SE ENCARGA CON JAVI DE ESTE PYT\n*22/01 - EVA ENVIA INFO RELACIONADA CON AP, ED Y FV: -\tAuditoría alumbrado público\n-\tContrato de mantenimiento de instalaciones de los edificios municipales (incluye todas las instalaciones excepto ascensores)\n-\tProyecto de instalación solar fotovoltaica previsto ejecutar este año.\n","tipo1":"AP","tipo2":"ESE","firma":"S2ENERGY","f_inicio":"","sol_docs":[],"inversion":null,"area":"AP","empresa":"S2E ENERGY","persona":"Luis Vilariño"},{"id":70,"codigo":"1009_26_PR_ED_PD_TEO","ano":26,"nombre":"TEO","provincia":"CORUÑA (LA)","estado":"STAND BY","obs":"*26/02 - REU MANTENIDA: IGP DEBE TERMINAR CONTA EL 02/03. EN CUANTO A LA VISITA QUE COMENTA ISIDRO S2 ","tipo1":"ED","tipo2":"PD","firma":"S2ENERGY","f_inicio":"09/02/2025","sol_docs":["5-feb."],"inversion":null,"area":"ED_AUD","empresa":"S2E ENERGY","persona":"Luis Vilariño"},{"id":71,"codigo":"10010_26_PR_ED (PD)_ESE_MIERES","ano":26,"nombre":"MIERES","provincia":"ASTURIAS","estado":"EN CURSO","obs":"*26/02 - ENVIAN FACTURAS Y PLANOS. INICIABLE CONTA (FORMACION MARTA Y JESSICA SEM 17 MARZ)","tipo1":"ED (PD)","tipo2":"ESE","firma":"S2ENERGY","f_inicio":"09/02/2025","sol_docs":["5-feb."],"inversion":null,"area":"ED_AUD","empresa":"S2E ENERGY","persona":"Luis Vilariño"},{"id":72,"codigo":"10010_26_PR_AP_ESE_MIERES","ano":26,"nombre":"MIERES","provincia":"ASTURIAS","estado":"FINALIZADO","obs":"","tipo1":"AP","tipo2":"ESE","firma":"S2ENERGY","f_inicio":"09/02/2025","sol_docs":["5-feb."],"inversion":null,"area":"AP","empresa":"S2E ENERGY","persona":"Luis Vilariño"},{"id":73,"codigo":"10011_26_PR_AP_ORM_CAMARGO_PUENTE","ano":26,"nombre":"CAMARGO_PUENTE","provincia":"CANTABRIA","estado":"STAND BY","obs":"*12/05 - PROPUESTA LUMÍNICA LISTA\n*08/01 - VOLVER A ESCANEAR E INCLUIR PUENTE Y PLAZA\n*18/12 - MANDA ENLACE UBI PUENTE, JAVI SE LO COMENTA A MANUEL PARA TRATAR","tipo1":"AP","tipo2":"ORM","firma":"JF","f_inicio":"23/09/2025","sol_docs":[],"inversion":null,"area":"AP","empresa":"ARTECOIN","persona":"Juan Francisco García","ap_puntos":1234,"ap_cm":23,"ap_secciones":308},{"id":74,"codigo":"10012_26_PR_ED (PD)_ESE_NAVALAGAMELLA","ano":26,"nombre":"NAVALAGAMELLA","provincia":"MADRID","estado":"EN CURSO","obs":"*26/02 -REU MANTENIDA: CONTA TERMINADA , PDT IGP LB","tipo1":"ED (PD)","tipo2":"ESE","firma":"JF","f_inicio":"06/02/2025","sol_docs":["3-mar."],"inversion":null,"area":"ED_AUD","empresa":"ARTECOIN","persona":"Juan Francisco García"},{"id":75,"codigo":"10012_26_PR_AP_ESE_NAVALAGAMELLA","ano":26,"nombre":"NAVALAGAMELLA","provincia":"MADRID","estado":"FINALIZADO","obs":"*29/05 - REDACCION TERMINADA EL 29/05","tipo1":"AP","tipo2":"ESE","firma":"JF","f_inicio":"06/02/2025","sol_docs":["5-mar."],"inversion":null,"area":"AP","empresa":"ARTECOIN","persona":"Juan Francisco García"},{"id":76,"codigo":"10013_26_PR_ED_PD_MAIRENA DEL ALJARAFE","ano":26,"nombre":"MAIRENA DEL ALJARAFE","provincia":"SEVILLA","estado":"FINALIZADO","obs":"F.ADJ:18/02 (PE: 1 MES)\n*08/04 - POR TEAMS SE ACLARA QUE ES SOLO PD\n*26/02 - EN LA REU MANTENIDA SE COMENTA QUE LA FECHA 18 MARZ NO ES NECESARIA CUMPLIRLA. EN CUANTO A LA VISITA YA NOS DIRA JF SI VA FISO O SONIN (DEPEN DE LA CALIDAD DE LA DOC QUE NOS ENVIEN)\n*22/01 -  9 COLES + CONSERVATORIO\n\nCEIP Malala - Av. del Conocimiento, s/n, Colegio Almendral, Mairena del Aljarafe, 41927 (SE)\nCEIP Lepantito - Calle San Sebastián, edificio Lepantito, Mairena del Aljarafe, 41927 (SE)\nCEIP Olivo  - Calle Verde Albahaca, 1, Mairena del Aljarafe, 41927 (SE)\nCEIP Lepanto - Calle Zaragoza, esquina Tarragona, Mairena del Aljarafe, 41927 (SE)\nCEIP Santa Teresa - Calle Pedro Muñoz Seca, edificio final derecha, Mairena del Aljarafe, 41927 (SE)\nCEIP Guadalquivir - Av. de la Constitución, s/n, y Centro Cultural G, Mairena del Aljarafe, 41927 (SE)\nCEIP Rosales - Calle Camarada Gar, Centro Educativo, Mairena del Aljarafe, 41927 (SE)\nCEIP Giner de los Ríos - CN Gelves, C/ Rosales, Mairena del Aljarafe, 41927 (SE)\nCEIP Miguel Hernández - Calle Hermanas Mirabal, 1, Mairena del Aljarafe, 41927 (SE)","tipo1":"ED","tipo2":"PD","firma":"JF","f_inicio":"18/02/2025","sol_docs":["24-feb.","21/05/2026"],"inversion":3512502.54,"area":"ED_AUD","empresa":"ARTECOIN","persona":"Juan Francisco García"},{"id":14,"codigo":"10014_26_PR_ED_PD_SAN ANTONIO DE BENAGÉBER","ano":26,"nombre":"SAN ANTONIO DE BENAGÉBER","provincia":"VALENCIA","estado":"EN CURSO","obs":"*10/04 - ENVIAN INVENTARIO ED Y EXCEL FACTURAS","tipo1":"ED","tipo2":"PD","firma":"JF","f_inicio":"02/03/2025","sol_docs":["2-mar."],"inversion":null,"area":"ED_AUD","empresa":"ARTECOIN","persona":"Juan Francisco García"},{"id":15,"codigo":"10015_26_PR_AP_ORM_CASTRO-URDIALES","ano":26,"nombre":"CASTRO-URDIALES","provincia":"CANTABRIA","estado":"FINALIZADO","obs":"*02/03 - ENVIADO\n*26/02 - REHACER EL PYT ORN DEL 2022","tipo1":"AP","tipo2":"ORM","firma":"SIN FIRMA","f_inicio":"27/02/2025","sol_docs":[],"inversion":null,"area":"AP","empresa":"—","persona":"—","ap_marca_lum":"BENITO"},{"id":16,"codigo":"10016_26_PR_AP_MMLL_VILLAQUILAMBRE","ano":26,"nombre":"VILLAQUILAMBRE","provincia":"LEÓN","estado":"EN CURSO","obs":"*02/06 - ACEINSA ENVIA GIS PARA PLANOS\n*02/03 - ENVIADO\n*26/02 - REHACER EL PYT ORN DEL 2022","tipo1":"AP","tipo2":"MMLL","firma":"JF","f_inicio":"","sol_docs":[],"inversion":null,"area":"AP","empresa":"ARTECOIN","persona":"Juan Francisco García","ap_puntos":220,"ap_cm":3},{"id":17,"codigo":"10017_26_PR_AP_MMLL_ANSOÁIN","ano":26,"nombre":"ANSOÁIN","provincia":"NAVARRA","estado":"FINALIZADO","obs":"*29/04 - PENDIENTE A FALTA DE QUE ACEINSA ENVIEN GIS Y EELL","tipo1":"AP","tipo2":"MMLL","firma":"JF","f_inicio":"","sol_docs":[],"inversion":null,"area":"AP","empresa":"ARTECOIN","persona":"Juan Francisco García"},{"id":77,"codigo":"10018_26_PR_AP_LEG_PARLA","ano":26,"nombre":"PARLA","provincia":"MADRID","estado":"INICIABLE","obs":"*29/04 - TRAS ENVIARNOS EL GIS, SE HAN PREPARADO LOS PLANOS Y SE LES HA ENVIADO\n*20/03 - INFORME ENVIADO. FALTA SACAR PLANOS CON CAPA GIS","tipo1":"AP","tipo2":"LEG","firma":"JF","f_inicio":"","sol_docs":[],"inversion":null,"area":"AP","empresa":"ARTECOIN","persona":"Juan Francisco García"},{"id":19,"codigo":"10019_26_PR_AP_PREST_PUENTE GENIL","ano":26,"nombre":"PUENTE GENIL","provincia":"CÓRDOBA","estado":"INICIABLE","obs":"PADJ:05/02 (PE 2M)\n*06/02 - TEAMS LOLI: Los servicios para la redacción de proyectos singulares de Renovación de las instalaciones de alumbrado exterior municipal, así como la dirección de las obras, puesta en marcha de la instalación y justificación documental exigida por la segunda convocatoria. Redacción del Proyecto Básico y de Ejecución, Estudio de Seguridad y Salud, proyectos de instalaciones y resto de documentación citada en el PPT será de DOS meses, desde el día siguiente a la formalización del contrato de servicios.","tipo1":"AP","tipo2":"PREST","firma":"JF","f_inicio":"","sol_docs":[],"inversion":null,"area":"AP","empresa":"ARTECOIN","persona":"Juan Francisco García"},{"id":78,"codigo":"10020_26_PR_AP_ESEP_HUELVA (DIPUTACIÓN)","ano":26,"nombre":"HUELVA (DIPUTACIÓN)","provincia":"HUELVA","estado":"EN CURSO","obs":"*DENOMINADO EN 2025 COMO :  10048_25_PR_AP_ESEP_HUELVA (PUEBLOS)\n(PE 5 M)\n*25/02 - TERMINAN TC FISO PERO NO ENVIAN ENTREGAS\n*08/01 - TODOS LOS DATOS COMPLETOS (SACAR VERGUENZAS DE LAS INSTALACIONES (MMLL, FOTOS CM Y FOTO POSTES)\n*08/10 - JAVI ENVIA SOL DOC Y DESPUES LE ENVIA ENLACE TEAMS\n*08/10 (TEAMS LOLI) - REVISION DE LOS MUNICIPIOS AGRUPADOS DE ALMONASTER LA REAL, CALA, CALAÑAS, EL CAMPILLO, CAMPOFRÍO, CHUCENA, JABUGO, PUEBLA DE GUZMÁM, VILLARRASA, Y LA ZARZA - EL PERRUNAL\nJAVI LES ENVIA UN CORREO SOL DOC QUE LE COMENTO JF Y ESTAMOS PDNT DE QUE NOS MANDEN UN CORREO GMAIL PARA QUE PODAMOS DARLES ACCESO A DRIVE\n03/12 - DOCUMENTACIÓN ENTREGADA Y CLASIFICADA DE LOS 10 MUNICIPIOS","tipo1":"AP","tipo2":"ESEP","firma":"JF","f_inicio":"23/09/2025","sol_docs":["08/10/2026"],"inversion":null,"area":"AP_PD","empresa":"ARTECOIN","persona":"Juan Francisco García","ap_marca_lum":"INST"},{"id":79,"codigo":"10021_26_PR_ED_ED_VALDELAGUNA","ano":26,"nombre":"VALDELAGUNA","provincia":"MADRID","estado":"","obs":"","tipo1":"ED","tipo2":"ED","firma":"","f_inicio":"","sol_docs":[],"inversion":null,"area":"ED_ARQ","empresa":"—","persona":"—"},{"id":80,"codigo":"10022_26_PR_AP_INT_PARADOR ALCALA DE HENARES","ano":26,"nombre":"PARADOR ALCALA DE HENARES","provincia":"MADIRD","estado":"EN CURSO","obs":"*03/06 SE HA ENVIADO LA PRIMERA PROPUESTA DE LUMINARIAS Y CONTROL A PARADORES\nF ADJ: 09/03  FE:15/06 (PE 3 MESES)","tipo1":"AP","tipo2":"INT","firma":"JF","f_inicio":"","sol_docs":[],"inversion":null,"area":"AP","empresa":"ARTECOIN","persona":"Juan Francisco García","ap_marca_lum":"PRILUX"},{"id":81,"codigo":"10023_26____CANET DEN BERENGUER","ano":26,"nombre":"CANET DEN BERENGUER","provincia":"#N/A","estado":"","obs":"","tipo1":"","tipo2":"","firma":"","f_inicio":"","sol_docs":[],"inversion":null,"area":"OTROS","empresa":"—","persona":"—"},{"id":82,"codigo":"10024_26__ED (?)_ESE_BINISSALEM","ano":26,"nombre":"BINISSALEM","provincia":"BALEARES","estado":"EN CURSO","obs":"*PROYECTO INICIADO EN BINISSALEM, EN FASE TEMPRANA.\n*INTERLOCUTORES CLAVE: JOANA (MEDIO AMBIENTE) Y DANIEL (ENERGÍAS).\n*RIESGO: DANIEL CONCENTRA LOS DATOS (POSIBLE CUELLO DE BOTELLA).\n*SOPORTE CAMPO: JAUME ACOMPAÑARÁ AL EQUIPO.\n*TERCERO RELEVANTE: ANDREU MORA (PROYECTO DE TELEGESTIÓN ~169K€).\n*DOCUMENTACIÓN: YA SOLICITADA, PENDIENTE DE RECIBIR.\n*SIGUIENTES PASOS: VISITA A FELANITX (EDIFICIOS).\n*CONTEXTO: ESE DE FERROVIAL VIGENTE (QUEDAN ~3 AÑOS), FUTURA LICITACIÓN.\n*OPORTUNIDAD: PROYECTO EN MURO (CONTRATO MENOR TRAS 10 MAYO).","tipo1":"ED (?)","tipo2":"ESE","firma":"S2ENERGY","f_inicio":"05/05/2025","sol_docs":["08/05/2026"],"inversion":null,"area":"ED_AUD","empresa":"S2E ENERGY","persona":"Luis Vilariño"},{"id":83,"codigo":"10024_26__AP_ESE_BINISSALEM","ano":26,"nombre":"BINISSALEM","provincia":"BALEARES","estado":"EN CURSO","obs":"","tipo1":"AP","tipo2":"ESE","firma":"S2ENERGY","f_inicio":"05/05/2025","sol_docs":["08/05/2026"],"inversion":null,"area":"AP","empresa":"S2E ENERGY","persona":"Luis Vilariño"},{"id":25,"codigo":"10025_26__ED_PD_FELANITX","ano":26,"nombre":"FELANITX","provincia":"BALEARES","estado":"EN CURSO","obs":"*14/04 - COMENTA LUIS POR CORREO: Este proyecto tendrá dos fases, esta primera que son los edificios y, al terminar, haremos la auditoria de cierre de la actual ESE de A.P. (Ferrovial) y todo el proyecto de la nueva ESE de A.P.","tipo1":"ED","tipo2":"PD","firma":"S2ENERGY","f_inicio":"05/05/2025","sol_docs":["08/05/2026"],"inversion":null,"area":"ED_AUD","empresa":"S2E ENERGY","persona":"Luis Vilariño"},{"id":27,"codigo":"10027_26__AP_ESE_JEREZ DE LOS CABALLEROS","ano":26,"nombre":"JEREZ DE LOS CABALLEROS","provincia":"BADAJOZ","estado":"INICIABLE","obs":"","tipo1":"AP","tipo2":"ESE","firma":"JF","f_inicio":"15/04/2025","sol_docs":["15-abr."],"inversion":null,"area":"AP","empresa":"ARTECOIN","persona":"Juan Francisco García"},{"id":84,"codigo":"10027_26__ED (?)_ESE_JEREZ DE LOS CABALLEROS","ano":26,"nombre":"JEREZ DE LOS CABALLEROS","provincia":"BADAJOZ","estado":"INICIABLE","obs":"F ADJ: 30/03  FE:","tipo1":"ED (?)","tipo2":"ESE","firma":"JF","f_inicio":"15/04/2025","sol_docs":["15-abr.","07/05/2026"],"inversion":null,"area":"ED_AUD","empresa":"ARTECOIN","persona":"Juan Francisco García"},{"id":28,"codigo":"10028_26_PR_AP__URBANIZACIONES DE CHIVA","ano":26,"nombre":"URBANIZACIONES DE CHIVA","provincia":"#N/A","estado":"","obs":"","tipo1":"AP","tipo2":"","firma":"","f_inicio":"","sol_docs":[],"inversion":null,"area":"AP","empresa":"—","persona":"—"},{"id":85,"codigo":"10029_26____CONSULTORIA ENERGETICA_DIPUTACION GRANADA","ano":26,"nombre":"CONSULTORIA ENERGETICA_DIPUTACION GRANADA","provincia":"#N/A","estado":"","obs":"","tipo1":"","tipo2":"","firma":"","f_inicio":"","sol_docs":[],"inversion":null,"area":"OTROS","empresa":"—","persona":"—"},{"id":86,"codigo":"10030_26____POLIDEPORTIVO_TRES CANTOS","ano":26,"nombre":"POLIDEPORTIVO_TRES CANTOS","provincia":"#N/A","estado":"","obs":"","tipo1":"","tipo2":"","firma":"","f_inicio":"","sol_docs":[],"inversion":null,"area":"OTROS","empresa":"—","persona":"—"},{"id":31,"codigo":"10031_26____GRANADA_SANDO","ano":26,"nombre":"GRANADA_SANDO","provincia":"#N/A","estado":"","obs":"","tipo1":"","tipo2":"","firma":"","f_inicio":"","sol_docs":[],"inversion":null,"area":"OTROS","empresa":"—","persona":"—"},{"id":87,"codigo":"10032_26_PR_ED_FV_SANT LLUIS","ano":26,"nombre":"SANT LLUIS","provincia":"BALEARES","estado":"EN CURSO","obs":"*03/06 - 1ª REUNIÓN CON AYTO. LAS DOS SEMANAS CUENTAN DESDE ESTE DIA, AL PROGRAMAR LA VISITA\n*27/05 - SE FIRMA EL CONTRATO, DOS SEMANAS DE EJECUCIÓN","tipo1":"ED","tipo2":"FV","firma":"JF","f_inicio":"03/06/2026","sol_docs":["28/05/2026"],"inversion":null,"area":"ED_ARQ","empresa":"ARTECOIN","persona":"Juan Francisco García"},{"id":88,"codigo":"10033_26_PR_AP_MMLL_ADRA","ano":26,"nombre":"ADRA","provincia":"ALMERÍA","estado":"","obs":"*20/05 - ENTREGA DE FISOTEC DE LOS RESULTADOS. QUEDA PENDIENTE VISITA POSTERIOR PARA MEDIR CALLES SIN ACCESO","tipo1":"AP","tipo2":"MMLL","firma":"JF","f_inicio":"","sol_docs":[],"inversion":null,"area":"AP","empresa":"ARTECOIN","persona":"Juan Francisco García"},{"id":89,"codigo":"10034_26_PR_AP__MADRID CENTRO","ano":26,"nombre":"MADRID CENTRO","provincia":"MADIRD","estado":"INICIABLE","obs":"","tipo1":"AP","tipo2":"","firma":"","f_inicio":"","sol_docs":[],"inversion":null,"area":"AP","empresa":"—","persona":"—"},{"id":35,"codigo":"10035_26_PR_AP__FASE 1_CONSUEGRA","ano":26,"nombre":"FASE 1_CONSUEGRA","provincia":"#N/A","estado":"INICIABLE","obs":"","tipo1":"AP","tipo2":"","firma":"","f_inicio":"","sol_docs":[],"inversion":null,"area":"AP","empresa":"—","persona":"—"},{"id":90,"codigo":"10036_26_PR_AP_MMLL_SORIA","ano":26,"nombre":"SORIA","provincia":"SORIA","estado":"","obs":"*03/06 - PRIMERA REUNIÓN CON EL TÉCNICO. SE DEFINE LA FECHA DE LAS MMLL","tipo1":"AP","tipo2":"MMLL","firma":"JF","f_inicio":"","sol_docs":[],"inversion":null,"area":"AP","empresa":"ARTECOIN","persona":"Juan Francisco García"},{"id":91,"codigo":"10037_26_PR_FV__CIUTADELLA_CAMPO DE FUTBOL","ano":26,"nombre":"CIUTADELLA_CAMPO DE FUTBOL","provincia":"#N/A","estado":"INICIABLE","obs":"","tipo1":"FV","tipo2":"","firma":"","f_inicio":"","sol_docs":[],"inversion":null,"area":"FV","empresa":"—","persona":"—"},{"id":38,"codigo":"10038_26___ESE_GRANADA (4 LOTES) DIPUTACIÓN","ano":26,"nombre":"GRANADA (4 LOTES) DIPUTACIÓN","provincia":"GRANADA","estado":"INICIABLE","obs":"F ADJ: 24/03   (PE 8 MESES)\n*30/03 - OBJETO: CONTRATO DE SERVICIO DE CONSULTORÍA ENERGÉTICA EN INSTALACIONES MUNICIPALES.\nLOTE 1: GUADIX, BAZA Y HUÉSCAR\nLOTE 2: ALPUJARRA Y COSTA\nLOTE 3: LOS MONTES Y VEGA DE GRANADA\nLOTE 4: ALHAMA, LOJA Y LECRÍN","tipo1":"","tipo2":"ESE","firma":"JF","f_inicio":"","sol_docs":[],"inversion":null,"area":"OTROS","empresa":"ARTECOIN","persona":"Juan Francisco García"},{"id":92,"codigo":"100__PR___SES SALINES","ano":null,"nombre":"SES SALINES","provincia":"BALEARES","estado":"INICIABLE","obs":"*13/05 - COMENTA JF QUE HA ENTRADO","tipo1":"","tipo2":"","firma":"","f_inicio":"","sol_docs":[],"inversion":null,"area":"OTROS","empresa":"—","persona":"—"}];
 
 const FIRMA_MAP = {
@@ -1578,6 +1577,10 @@ function goToDocsTab(){
 
 // TABS
 function showTab(id,el){
+  _activeTab=id;
+  // Al salir de agenda: restaurar estado de botones globales según pila de proyectos
+  // Al entrar en agenda: se actualizará por updateHistButtons() cuando la agenda cargue
+  _updateUndoRedoBtns(); // sincroniza botones con la pila correcta al cambiar de pestaña
   document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.getElementById('tab-'+id).classList.add('active');
@@ -1828,9 +1831,12 @@ function _saveBilling(){ try{ localStorage.setItem('ac_billing',JSON.stringify(A
 function getBilling(pid,field){ var e=AC_BILLING[pid]; return e?!!e[field]:false; }
 function toggleBilling(ev,pid,field){
   ev.stopPropagation();
+  pushUndo();
   if(!AC_BILLING[pid]) AC_BILLING[pid]={};
   AC_BILLING[pid][field]=!AC_BILLING[pid][field];
   _saveBilling();
+  var _bp=DATA.find(function(x){return x.id===pid;});
+  if(_bp){_bp.billing_data=Object.assign({},AC_BILLING[pid]);saveData();}
   applyFilters();
   renderDocs();
 }
@@ -1914,12 +1920,15 @@ function openBillingPopover(ev, pid){
   },50);
 }
 function saveBillingPopover(pid){
+  pushUndo();
   if(!AC_BILLING[pid]) AC_BILLING[pid]={};
   AC_BILLING[pid].cont  = document.getElementById('bp-cont').checked;
   AC_BILLING[pid].correo= document.getElementById('bp-correo').checked;
   AC_BILLING[pid].fecha = document.getElementById('bp-fecha').value;
   AC_BILLING[pid].obs   = document.getElementById('bp-obs').value.trim();
   _saveBilling();
+  var _bpp=DATA.find(function(x){return x.id===pid;});
+  if(_bpp){_bpp.billing_data=Object.assign({},AC_BILLING[pid]);saveData();}
   document.getElementById('billing-popover').remove();
   applyFilters();
   renderDocs();
@@ -3319,7 +3328,7 @@ function clearAllTdEntregas(){
 /* ─────────────────────────── MARCA LUMINARIA PICKER ─────────────────────────── */
 var MARCAS_LUM_DEFAULT=['ARTESOLAR','BENITO','HISPALED','IDLUX','IGUZZINI','INST','MOONOFF','PHILIPS','PHILIPS/SIMON','PRILUX','SCHREDER','SIMON','SOCELEC','SIN MARCA','VARIOS'];
 var MARCAS_LUM=(function(){try{var s=localStorage.getItem('artecoin-marcas-lum');return s?JSON.parse(s):MARCAS_LUM_DEFAULT.slice();}catch(e){return MARCAS_LUM_DEFAULT.slice();}})();
-function _saveMarcasLum(){try{localStorage.setItem('artecoin-marcas-lum',JSON.stringify(MARCAS_LUM));}catch(e){}}
+function _saveMarcasLum(){try{localStorage.setItem('artecoin-marcas-lum',JSON.stringify(MARCAS_LUM));}catch(e){}  _saveConfigToSupabase();}
 
 var _mlPid=null;
 function openMarcaLumPicker(pid, el){
@@ -3434,7 +3443,7 @@ function todayStr(){
 var REVISORES = (function(){
   try{ return JSON.parse(localStorage.getItem('ac_revisores')||'[]'); }catch(e){ return []; }
 })();
-function saveRevisores(){ try{ localStorage.setItem('ac_revisores', JSON.stringify(REVISORES)); }catch(e){} }
+function saveRevisores(){ try{ localStorage.setItem('ac_revisores', JSON.stringify(REVISORES)); }catch(e){}  _saveConfigToSupabase(); }
 function addRevisor(ini){
   ini = ini.trim().toUpperCase();
   if(ini && REVISORES.indexOf(ini)<0){ REVISORES.push(ini); saveRevisores(); }
@@ -4421,7 +4430,7 @@ function toggleFaseFromMatrix(el){
   if(faseId === 'f04_lbe' && getFaseState(p, faseId) !== 'blocked'){
     if(getFaseState(p, faseId)==='done'){
       if(!confirm('¿Borrar fecha LBE/Conta?')) return;
-      clearFaseFecha(p,faseId); refreshFaseCell(el,p,faseId); renderFlujoIfActive(); return;
+      pushUndo(); clearFaseFecha(p,faseId); refreshFaseCell(el,p,faseId); saveData(); renderFlujoIfActive(); return;
     }
     openLbePicker(el, p);
     return;
@@ -4430,7 +4439,7 @@ function toggleFaseFromMatrix(el){
   if(faseId === 'f05_cribado' && getFaseState(p, faseId) !== 'blocked'){
     if(getFaseState(p, faseId)==='done'){
       if(!confirm('¿Borrar fecha Cribado?')) return;
-      clearFaseFecha(p,faseId); refreshFaseCell(el,p,faseId); renderFlujoIfActive(); return;
+      pushUndo(); clearFaseFecha(p,faseId); refreshFaseCell(el,p,faseId); saveData(); renderFlujoIfActive(); return;
     }
     openCribadoPicker(el, p);
     return;
@@ -4457,13 +4466,17 @@ function toggleFaseFromMatrix(el){
     return;
   }
   if(state==='done'){
+    pushUndo();
     clearFaseFecha(p,faseId);
     refreshFaseCell(el,p,faseId);
+    saveData();
     renderFlujoIfActive();
   } else {
     openDocDatePicker(faseId, el, function(fecha){
+      pushUndo();
       setFaseFecha(p,faseId,fecha);
       refreshFaseCell(el,p,faseId);
+      saveData();
       renderFlujoIfActive();
     });
   }
@@ -5214,7 +5227,7 @@ function toggleDocFromMatrix(el){
   var docId = el.dataset.did;
   var p = DATA.find(function(x){ return x.id===pid; });
   if(!p) return;
-  pushUndo();
+  // pushUndo() se llama dentro de cada ruta de cambio real, no aquí
 
   // Docs seleccionables con date picker:
   // - todos los docs AP (ap_*, td_entrega, apX, edOBS, edX)
@@ -5250,10 +5263,12 @@ function toggleDocFromMatrix(el){
   var editableHere = ['ed_listado','ed_cups','ed_costes','ed_contact','edOBS','edX','apX'];
   if(isAPdoc || isAPproject || editableHere.indexOf(docId)!==-1){
     if(isDocRec(p,docId)){
+      pushUndo();
       clearDocFecha(p,docId);
       if(docId==='ed_contact'||docId==='ap_contact') delete p.contact_data;
       refreshMatrixCell(el,p,docId);
       if(docId==='ap_planos'||docId==='fv_planos') _refreshRegistroPlanosCell(pid);
+      saveData();
       applyFilters();
     } else {
       // Pickers especializados por tipo de doc
@@ -5265,9 +5280,11 @@ function toggleDocFromMatrix(el){
       var _docDef = (typeof DOCS_AP!=='undefined'?DOCS_AP:[]).concat(typeof DOCS_FV!=='undefined'?DOCS_FV:[]).concat(typeof DOCS_ED!=='undefined'?DOCS_ED:[]).find(function(d){return d.id===docId;});
       var _showFmt = !!(_docDef && _docDef.tipo);
       openDocDatePicker(docId, el, function(fecha,_ini){
+        pushUndo();
         setDocFecha(p,docId,fecha,_ini);
         refreshMatrixCell(el,p,docId);
         if(docId==='ap_planos'||docId==='fv_planos') _refreshRegistroPlanosCell(pid);
+        saveData();
         applyFilters();
         renderFlujoIfActive();
       }, _showFmt);
@@ -5557,10 +5574,12 @@ function confirmLbePicker(pid){
   var emailRaw = emailEl?emailEl.value:'';
   var emailPts = emailRaw?emailRaw.split('-'):[];
   var emailFmt = emailPts.length===3?emailPts[2]+'/'+emailPts[1]+'/'+emailPts[0]:'';
+  pushUndo();
   setFaseFecha(p,'f04_lbe',fecha+'|'+ini+'|LBE|'+emailFmt);
   var picker=document.getElementById('doc-date-picker'); if(picker)picker.style.display='none';
   var anchor=picker?picker._lbeAnchor:null;
   if(anchor) refreshFaseCell(anchor,p,'f04_lbe');
+  saveData();
   renderFlujoIfActive();
 }
 
@@ -5602,10 +5621,12 @@ function confirmCribadoPicker(pid){
   var fecha = pts[2]+'/'+pts[1]+'/'+pts[0];
   var ini = (iniEl?iniEl.value.toUpperCase().substring(0,3):'');
   var numCts = numEl?numEl.value:'';
+  pushUndo();
   setFaseFecha(p,'f05_cribado',fecha+'|'+ini+'|CRIBADO|'+numCts);
   var picker=document.getElementById('doc-date-picker'); if(picker)picker.style.display='none';
   var anchor=picker?picker._criAnchor:null;
   if(anchor) refreshFaseCell(anchor,p,'f05_cribado');
+  saveData();
   renderFlujoIfActive();
 }
 
@@ -5658,6 +5679,7 @@ function _tdSaveEmpresa(pid, key, otroDesc){
 function _tdSaveField(pid, field, val){
   var p = DATA.find(function(x){return x.id===pid;}); if(!p)return;
   if(!p.toma_datos) p.toma_datos={};
+  pushUndo();
   if(field==='planif') p.toma_datos.planif_enviada = val;
   else if(field==='fecha_visita'){ var pts=val.split('-'); p.toma_datos.fecha_visita = pts.length===3?pts[2]+'/'+pts[1]+'/'+pts[0]:''; }
   saveData(); _refreshRegistroTDCell(pid);
@@ -5875,10 +5897,12 @@ function confirmContratPicker(pid){
   var nt=new Date(); var fechaStr=String(nt.getDate()).padStart(2,'0')+'/'+String(nt.getMonth()+1).padStart(2,'0')+'/'+nt.getFullYear();
   var fechaTDParts = fechaTDEl && fechaTDEl.value ? fechaTDEl.value.split('-') : [];
   var fechaTD = fechaTDParts.length===3 ? fechaTDParts[2]+'/'+fechaTDParts[1]+'/'+fechaTDParts[0] : '';
+  pushUndo();
   p.contrat_data = {empresa:empresa, fecha_td:fechaTDEl ? fechaTDEl.value : '', ini:ini};
   setFaseFecha(p, 'f06_contrat', fechaStr+'|'+ini+'|CONTRAT|'+empresa+'|'+fechaTD);
   closeDocDatePicker();
   refreshFaseCellById(p, 'f06_contrat');
+  saveData();
   renderFlujoIfActive();
 }
 
@@ -6587,11 +6611,13 @@ function confirmContactPicker(pid){
   var fechaStr=parts[2]+'/'+parts[1]+'/'+parts[0];
   var _cpicker = document.getElementById('doc-date-picker');
   var _cDocId = (_cpicker && _cpicker._contactDocId) || 'ed_contact';
+  pushUndo();
   p.contact_data = {nombre:nombre,cargo:cargo,tel:tel,fecha:fechaEl.value,ini:ini};
   // Store in doc fecha so isDocRec works
   setDocFecha(p, _cDocId, fechaStr+'|'+ini+'|CONTACT');
   closeDocDatePicker();
   refreshMatrixCell(null,p,_cDocId);
+  saveData();
   applyFilters();
 }
 
@@ -6657,10 +6683,12 @@ function confirmCostesPicker(pid){
   var fechaStr=parts[2]+'/'+parts[1]+'/'+parts[0];
   var data={fecha:fechaEl.value,ini:ini};
   tipos.forEach(function(t){ data[t]=!!(document.getElementById(t)&&document.getElementById(t).checked); });
+  pushUndo();
   p.costes_data=data;
   setDocFecha(p,'ed_costes',fechaStr+'|'+ini+'|COSTES|'+seleccionados.join(','));
   closeDocDatePicker();
   refreshMatrixCell(null,p,'ed_costes');
+  saveData();
   applyFilters();
 }
 // ── AP Stats inline edit ────────────────────────────────────────────────────
@@ -6751,6 +6779,7 @@ function confirmApCostesPicker(pid){
   if(!selected.length){alert('Selecciona al menos un tipo de coste');return;}
   var parts=fechaEl.value.split('-');
   var fechaStr=parts[2]+'/'+parts[1]+'/'+parts[0];
+  pushUndo();
   if(!p.ap_costes_data)p.ap_costes_data={};
   selected.forEach(function(k){p.ap_costes_data[k]=true;});
   p.ap_costes_data.fecha=fechaEl.value; p.ap_costes_data.ini=ini;
@@ -6758,6 +6787,7 @@ function confirmApCostesPicker(pid){
   setDocFecha(p,'ap_costes',fechaStr+'|'+ini+'|COSTES|'+summary);
   closeDocDatePicker();
   refreshMatrixCell(null,p,'ap_costes');
+  saveData();
   applyFilters();
 }
 
@@ -6807,12 +6837,14 @@ function confirmCupsCmPicker(pid){
   if(!cups||!cm){alert('Indica CUPS y CM totales');return;}
   var parts=fechaEl.value.split('-');
   var fechaStr=parts[2]+'/'+parts[1]+'/'+parts[0];
+  pushUndo();
   if(!p.ap_cups_data)p.ap_cups_data={};
   p.ap_cups_data={cups:cups,cm_total:cm,fecha:fechaEl.value,ini:ini};
   var summary=cups+'/'+cm+' CM';
   setDocFecha(p,'ap_cups',fechaStr+'|'+ini+'|CUPS_CM|'+summary);
   closeDocDatePicker();
   refreshMatrixCell(null,p,'ap_cups');
+  saveData();
   applyFilters();
 }
 
@@ -6859,11 +6891,13 @@ function confirmObsPicker(pid){
   if(!fechaEl||!fechaEl.value){alert('Selecciona una fecha');return;}
   var parts=fechaEl.value.split('-');
   var fechaStr=parts[2]+'/'+parts[1]+'/'+parts[0];
+  pushUndo();
   p.obs_data={desc:desc,fecha:fechaEl.value,ini:ini};
   var encodedDesc=encodeURIComponent(desc.substring(0,80));
   setDocFecha(p,'edOBS',fechaStr+'|'+ini+'|OBS|'+encodedDesc);
   closeDocDatePicker();
   refreshMatrixCell(null,p,'edOBS');
+  saveData();
   applyFilters();
 }
 function clearObsData(pid){
@@ -6924,6 +6958,7 @@ function confirmOtrosPicker(pid, docId){
   if(!nombre&&!desc&&!tipo){alert('Indica al menos el nombre del archivo, descripción o tipo');return;}
   var parts=fechaEl.value.split('-');
   var fechaStr=parts[2]+'/'+parts[1]+'/'+parts[0];
+  pushUndo();
   if(!p.otros_data)p.otros_data={};
   p.otros_data[docId]={nombre:nombre,desc:desc,tipo:tipo,fecha:fechaEl.value,ini:ini};
   // summary format: "nombre|tipo" so cell display can split and show both
@@ -6932,6 +6967,7 @@ function confirmOtrosPicker(pid, docId){
   setDocFecha(p,docId,fechaStr+'|'+ini+'|OTROS|'+summary);
   closeDocDatePicker();
   refreshMatrixCell(null,p,docId);
+  saveData();
   applyFilters();
 }
 function positionPicker(picker, anchorEl){
@@ -7602,7 +7638,12 @@ var _SB_HDR_C = {'apikey':_SB_KEY_C,'Authorization':'Bearer '+_SB_KEY_C,'Content
 var _SAVE_FIELDS=['estado','obs','firma','empresa','empresa_campo','provincia','f_inicio',
   'inversion','plazo_entrega','biomasa_municipio','marca_luminaria','num_centros','energia',
   'toma_datos','entregas_td','f_entrega','sol_docs','fv_sup','fv_potencia','fv_estado',
-  'plazos','ap_puntos','ap_cm','ap_secciones','ap_marca_lum'];
+  'plazos','ap_puntos','ap_cm','ap_secciones','ap_marca_lum',
+  // Documentación — campos que guardan el estado de recepción de docs
+  'docs_fechas','docs_recibidos','docs_counts','docs_centros_ind',
+  'contact_data','costes_data','ap_costes_data','ap_cups_data',
+  'horario_data','obs_data','otros_data','contrat_data',
+  'fases_done','fact_tipos','fv_obs','fecha_prev','revisiones_td','billing_data'];
 
 // Restaurar datos guardados ANTES de init() para que el render use los valores correctos
 _restoreCentros();         // centros localStorage (síncrono)
@@ -7623,10 +7664,10 @@ function _pollFromSupabase(){
     .then(function(rows){
       if(!rows.length||!rows[0].data) return;
       var nd=rows[0].data;
-      var lr=localStorage.getItem('ac_proj_delta');
-      if(JSON.stringify(nd)!==lr){
+      var ndStr=JSON.stringify(nd);
+      if(ndStr!==_lastSbProjDelta){
+        _lastSbProjDelta=ndStr;
         _applyProjDelta(nd);
-
         _refreshActiveViews();
         _setProjSyncBadge('🔄 Actualizado '+new Date().toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'}),'#16A34A');
         setTimeout(function(){_setProjSyncBadge('');},4000);
@@ -7657,6 +7698,14 @@ function _pollFromSupabase(){
 
 setInterval(_pollFromSupabase, 60000); // sincronizar cada 60 segundos
 
+// Atajos teclado globales Ctrl+Z / Ctrl+Y para undo/redo
+document.addEventListener('keydown', function(e){
+  var tag = document.activeElement ? document.activeElement.tagName : '';
+  if(tag==='INPUT'||tag==='TEXTAREA'||tag==='SELECT') return; // no interceptar edición
+  if(e.ctrlKey && e.key==='z'){ e.preventDefault(); undoAction(); }
+  if(e.ctrlKey && (e.key==='y'||e.key==='Y')){ e.preventDefault(); redoAction(); }
+});
+
 init();
 
 // ── Area label with tipo2 ────────────────────────────────────────────────────
@@ -7669,10 +7718,24 @@ function getAreaLabel(p){
 
 // ── Undo / Redo ──────────────────────────────────────────────────────────────
 var undoStack=[], redoStack=[], selectedRow=null;
+var _lastSbProjDelta = null; // in-memory cache para comparar en poll
+var _activeTab='dashboard'; // pestaña activa actual
 function pushUndo(){
-  undoStack.push(JSON.stringify(DATA));
-  if(undoStack.length>50) undoStack.shift();
-  redoStack=[];
+  try{
+    undoStack.push({data:JSON.stringify(DATA), billing:JSON.stringify(AC_BILLING||{}), tab:_activeTab});
+    if(undoStack.length>50) undoStack.shift();
+    redoStack=[];
+    console.log('[pushUndo] OK — stack:', undoStack.length, 'tab:', _activeTab);
+  }catch(e){
+    console.error('[pushUndo] ERROR serializando DATA:', e);
+    showToast('⚠️ Error al guardar estado para deshacer');
+  }
+  _updateUndoRedoBtns(); // siempre actualizar botones
+}
+function _updateUndoRedoBtns(){
+  var u=document.getElementById('btn-undo-g'), r=document.getElementById('btn-redo-g');
+  if(u){u.disabled=!undoStack.length; u.style.opacity=undoStack.length?'1':'0.4';}
+  if(r){r.disabled=!redoStack.length; r.style.opacity=redoStack.length?'1':'0.4';}
 }
 
 function saveData(){
@@ -7701,6 +7764,38 @@ function _saveProjToSupabase(delta){
   }catch(e){}
 }
 
+// ── Config compartida (MARCAS_LUM, REVISORES) → Supabase id=4 ────────────────
+var _cfgSbTimer=null;
+function _saveConfigToSupabase(){
+  clearTimeout(_cfgSbTimer);
+  _cfgSbTimer=setTimeout(function(){
+    try{
+      fetch(_SB_URL_C+'/rest/v1/agenda_data',{
+        method:'POST',
+        headers:Object.assign({},_SB_HDR_C,{'Prefer':'resolution=merge-duplicates'}),
+        body:JSON.stringify({id:4,data:{marcas_lum:MARCAS_LUM,revisores:REVISORES}})
+      }).catch(function(){});
+    }catch(e){}
+  },600);
+}
+function _restoreConfig(){
+  fetch(_SB_URL_C+'/rest/v1/agenda_data?id=eq.4',{headers:_SB_HDR_C})
+    .then(function(r){return r.ok?r.json():[]; })
+    .then(function(rows){
+      if(!rows.length||!rows[0].data) return;
+      var cfg=rows[0].data;
+      if(cfg.marcas_lum&&Array.isArray(cfg.marcas_lum)){
+        MARCAS_LUM.length=0;
+        cfg.marcas_lum.forEach(function(m){MARCAS_LUM.push(m);});
+        try{localStorage.setItem('artecoin-marcas-lum',JSON.stringify(MARCAS_LUM));}catch(e){}
+      }
+      if(cfg.revisores&&Array.isArray(cfg.revisores)){
+        REVISORES.length=0;
+        cfg.revisores.forEach(function(r){REVISORES.push(r);});
+        try{localStorage.setItem('ac_revisores',JSON.stringify(REVISORES));}catch(e){}
+      }
+    }).catch(function(){});
+}
 function _applyProjDelta(delta){
   if(!delta) return;
   var changed=[];
@@ -7709,6 +7804,7 @@ function _applyProjDelta(delta){
     if(!d) return;
     var before=p.estado;
     _SAVE_FIELDS.forEach(function(f){ if(d[f]!==undefined) p[f]=d[f]; });
+    if(p.billing_data) AC_BILLING[p.id] = Object.assign({}, p.billing_data);
     if(p.estado!==before) changed.push('id='+p.id+' '+before+'→'+p.estado);
   });
 
@@ -7720,31 +7816,67 @@ function _restoreProjectData(){
     .then(function(r){ return r.ok?r.json():[]; })
     .then(function(rows){
       if(!rows.length||!rows[0].data) return;
+      _lastSbProjDelta=JSON.stringify(rows[0].data);
       _applyProjDelta(rows[0].data);
+      // Migración única: si hay billing en localStorage pero no en Supabase, subirlo
+      var _needsBillingMig=DATA.some(function(p){return AC_BILLING[p.id]&&!p.billing_data;});
+      if(_needsBillingMig){DATA.forEach(function(p){if(AC_BILLING[p.id]&&!p.billing_data)p.billing_data=Object.assign({},AC_BILLING[p.id]);});saveData();}
       _refreshActiveViews();
     }).catch(function(){});
+  _restoreConfig(); // carga marcas_lum y revisores desde Supabase
 }
 function _refreshActiveViews(){
   applyFilters();
-  try{renderDocs();}catch(e){}
+  try{renderDocs();}catch(e){ console.error('[renderDocs] ERROR:', e); }
   try{initCentrosTab();}catch(e){}
   var kanbanPanel=document.getElementById('tab-kanban');
   if(kanbanPanel&&kanbanPanel.classList.contains('active')) try{renderKanban();}catch(e){}
   renderFlujoIfActive();
 }
+function _navToTab(tabId){
+  if(!tabId) return;
+  var tabEl=document.querySelector('.tab[onclick*="'+tabId+'"]');
+  if(tabEl && tabId!==_activeTab) showTab(tabId, tabEl);
+  else _refreshActiveViews();
+}
 function undoAction(){
+  // Delegar a la agenda cuando la pestaña activa es agenda
+  if(_activeTab==='agenda'){
+    if(typeof histUndo==='function') histUndo();
+    else showToast('ℹ️ Nada que deshacer');
+    return;
+  }
+  console.log('[undoAction] stack:', undoStack.length);
   if(!undoStack.length){ showToast('ℹ️ Nada que deshacer'); return; }
-  redoStack.push(JSON.stringify(DATA));
-  DATA=JSON.parse(undoStack.pop());
-  _refreshActiveViews();
-  showToast('↩ Deshecho');
+  redoStack.push({data:JSON.stringify(DATA), billing:JSON.stringify(AC_BILLING||{}), tab:_activeTab});
+  var entry=undoStack.pop();
+  DATA=JSON.parse(entry.data);
+  if(entry.billing!==undefined){try{var _b=JSON.parse(entry.billing);Object.keys(AC_BILLING).forEach(function(k){delete AC_BILLING[k];});Object.keys(_b).forEach(function(k){AC_BILLING[k]=_b[k];});_saveBilling();}catch(e){console.error('[undo] billing restore:',e);}}
+  saveData();
+  _updateUndoRedoBtns();
+  _navToTab(entry.tab);
+  showToast('↩ Deshecho — '+_tabLabel(entry.tab));
 }
 function redoAction(){
+  // Delegar a la agenda cuando la pestaña activa es agenda
+  if(_activeTab==='agenda'){
+    if(typeof histRedo==='function') histRedo();
+    else showToast('ℹ️ Nada que rehacer');
+    return;
+  }
   if(!redoStack.length){ showToast('ℹ️ Nada que rehacer'); return; }
-  undoStack.push(JSON.stringify(DATA));
-  DATA=JSON.parse(redoStack.pop());
-  _refreshActiveViews();
-  showToast('↪ Rehecho');
+  undoStack.push({data:JSON.stringify(DATA), billing:JSON.stringify(AC_BILLING||{}), tab:_activeTab});
+  var entry=redoStack.pop();
+  DATA=JSON.parse(entry.data);
+  if(entry.billing!==undefined){try{var _b=JSON.parse(entry.billing);Object.keys(AC_BILLING).forEach(function(k){delete AC_BILLING[k];});Object.keys(_b).forEach(function(k){AC_BILLING[k]=_b[k];});_saveBilling();}catch(e){console.error('[redo] billing restore:',e);}}
+  saveData();
+  _updateUndoRedoBtns();
+  _navToTab(entry.tab);
+  showToast('↪ Rehecho — '+_tabLabel(entry.tab));
+}
+function _tabLabel(id){
+  var map={dashboard:'Dashboard',tabla:'Registro',docs:'Documentación',centros:'Centros PD',correos:'Correos',agenda:'Agenda',mapa:'Mapa',kanban:'Kanban',empresas:'Empresas',municipios:'Municipios'};
+  return map[id]||id||'';
 }
 
 // ── Add Project ───────────────────────────────────────────────────────────────
@@ -8261,6 +8393,7 @@ function openPlanosUrl(url){ if(url) window.open(url,'_blank'); }
 function spNum(v){if(v===null||v===undefined||v==='')return 0;if(typeof v==='number')return v;return parseFloat(String(v).replace(/\./g,'').replace(',','.'))||0;}
 function toggleBiomasaMunicipio(){
   var p=getCtrProject(); if(!p) return;
+  pushUndo();
   p.biomasa_municipio = !p.biomasa_municipio;
   saveData();
   renderCentros();
@@ -9898,12 +10031,13 @@ header .logo span{opacity:.65;font-weight:400;font-size:13px;margin-left:10px;}
 header .spacer{flex:1;}
 header .btn-add{background:white;color:var(--primary);border:none;padding:7px 16px;border-radius:6px;font-weight:600;cursor:pointer;font-size:13px;display:flex;align-items:center;gap:6px;transition:background .15s;}
 header .btn-add:hover{background:var(--accent-bg);}
-.tabs{background:white;border-bottom:1px solid var(--border);padding:0 20px;display:flex;gap:0;position:sticky;top:54px;z-index:90;}
+.tabs{background:white;border-bottom:1px solid var(--border);padding:0 20px;display:flex;gap:0;position:sticky;top:0;z-index:90;}
 .tab{padding:10px 18px;cursor:pointer;font-size:13px;font-weight:600;color:var(--text-light);border-bottom:3px solid transparent;transition:color .15s,border-color .15s;white-space:nowrap;}
 .tab:hover{color:var(--primary);}
 .tab.active{color:var(--primary);border-bottom-color:var(--primary);}
 .tab .count{display:inline-block;background:var(--accent-bg);color:var(--primary);border-radius:10px;padding:1px 7px;font-size:11px;margin-left:5px;}
-.toolbar{background:white;border-bottom:1px solid var(--border);padding:10px 20px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;position:sticky;top:94px;z-index:85;}
+#toolbarArea{position:sticky;top:40px;z-index:85;background:white;}
+.toolbar{background:white;border-bottom:1px solid var(--border);padding:10px 20px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;}
 .search-wrap{position:relative;flex:1;min-width:180px;max-width:320px;}
 .search-wrap input{width:100%;padding:7px 12px 7px 34px;border:1px solid var(--border);border-radius:6px;font-size:13px;color:var(--text);outline:none;transition:border .15s;}
 .search-wrap input:focus{border-color:var(--primary-light);}
@@ -9911,7 +10045,7 @@ header .btn-add:hover{background:var(--accent-bg);}
 select.filter{padding:7px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;color:var(--text);background:white;outline:none;cursor:pointer;}
 .btn-sm{padding:6px 12px;border-radius:6px;border:1px solid var(--border);background:white;color:var(--text);font-size:12px;cursor:pointer;display:flex;align-items:center;gap:5px;font-weight:500;transition:background .12s,border-color .12s;}
 .btn-sm:hover{background:var(--accent-bg);border-color:var(--primary-light);color:var(--primary);}
-.stats-bar{display:flex;gap:0;background:var(--accent-bg);border-bottom:1px solid var(--border);padding:0 20px;position:sticky;top:148px;z-index:84;}
+.stats-bar{display:flex;gap:0;background:var(--accent-bg);border-bottom:1px solid var(--border);padding:0 20px;}
 .stat{padding:8px 18px 8px 0;display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text-light);}
 .stat strong{color:var(--primary);font-size:15px;}
 .stat+.stat{border-left:1px solid var(--border);padding-left:18px;}
@@ -10067,12 +10201,6 @@ tbody tr[style*="opacity"]:hover{background:#fafafa;}
 </head>
 <body>
 
-<header>
-  <div class="logo">ARTECOIN <span>Agenda de Contactos</span></div>
-  <div class="spacer"></div>
-  <button class="btn-add" onclick="openModalNew()">＋ Nuevo contacto</button>
-</header>
-
 <div class="tabs">
   <div class="tab active" id="tab-ed" onclick="switchTab('ED')">Agenda ED <span class="count" id="cnt-ed">0</span></div>
   <div class="tab" id="tab-otros" onclick="switchTab('OTROS')">Colaboradores <span class="count" id="cnt-otros">0</span></div>
@@ -10112,6 +10240,8 @@ tbody tr[style*="opacity"]:hover{background:#fafafa;}
     <div style="width:1px;background:var(--border);height:24px;margin:0 2px"></div>
     <button class="btn-sm" onclick="syncNow()" title="Actualizar datos desde el servidor" id="btnSync">🔄 Sync</button>
     <span id="syncStatus" style="font-size:11px;color:var(--text-light);min-width:130px"></span>
+    <div style="width:1px;background:var(--border);height:24px;margin:0 2px"></div>
+    <button class="btn-add" onclick="openModalNew()" style="padding:7px 16px;font-size:12px;font-weight:700;background:linear-gradient(135deg,#1A4F8A 0%,#2272B8 100%);color:white;border:none;border-radius:8px;cursor:pointer;display:flex;align-items:center;gap:6px;box-shadow:0 2px 8px rgba(26,79,138,.35);transition:opacity .15s,box-shadow .15s;white-space:nowrap" onmouseover="this.style.opacity='.88';this.style.boxShadow='0 4px 14px rgba(26,79,138,.5)'" onmouseout="this.style.opacity='1';this.style.boxShadow='0 2px 8px rgba(26,79,138,.35)'">＋ Nuevo contacto</button>
   </div>
   <div class="stats-bar">
     <div class="stat"><strong id="st-total">0</strong> contactos</div>
@@ -10582,6 +10712,10 @@ function updateHistButtons(){
   const u=document.getElementById('btnUndo');const r=document.getElementById('btnRedo');
   if(u){u.disabled=!undoStack.length;u.style.opacity=undoStack.length?'1':'0.4';}
   if(r){r.disabled=!redoStack.length;r.style.opacity=redoStack.length?'1':'0.4';}
+  // Sincronizar también con los botones globales del header principal
+  const ug=document.getElementById('btn-undo-g');const rg=document.getElementById('btn-redo-g');
+  if(ug){ug.disabled=!undoStack.length;ug.style.opacity=undoStack.length?'1':'0.4';}
+  if(rg){rg.disabled=!redoStack.length;rg.style.opacity=redoStack.length?'1':'0.4';}
 }
 
 // ── SELECCIÓN MÚLTIPLE ────────────────────
@@ -11501,16 +11635,11 @@ loadData().then(()=>{mergeNewDefaults();_mun_buildTableHead();_mun_populateProvi
 
 // Sticky dinámico — calcula alturas reales y actualiza top
 function recalcSticky(){
-  const header=document.querySelector('header');
   const tabs=document.querySelector('.tabs');
-  const toolbar=document.querySelector('.toolbar');
-  const statsBar=document.querySelector('.stats-bar');
-  if(!header||!tabs||!toolbar)return;
-  const h=header.getBoundingClientRect().height;
+  const toolbarArea=document.getElementById('toolbarArea');
+  if(!tabs||!toolbarArea)return;
   const t=tabs.getBoundingClientRect().height;
-  const tb=toolbar.getBoundingClientRect().height;
-  toolbar.style.top=Math.round(h+t)+'px';
-  if(statsBar)statsBar.style.top=Math.round(h+t+tb)+'px';
+  toolbarArea.style.top=Math.round(t)+'px';
 }
 // Esperar a que el navegador haya pintado antes de medir
 requestAnimationFrame(()=>requestAnimationFrame(recalcSticky));
