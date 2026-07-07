@@ -4700,7 +4700,7 @@ function startCellEdit(e, id, field, el){
     inp.style.cssText = 'width:52px;text-align:center';
     inp.value = cur;
     inp.min = 20; inp.max = 30;
-  } else if(field === 'fecha_prev' || field === 'fecha_entrega' || field === 'f_adj'){
+  } else if(field === 'fecha_prev' || field === 'fecha_entrega' || field === 'f_adj' || field === 'f_inicio'){
     inp = document.createElement('input');
     inp.type = 'date';
     inp.className = 'cell-edit-input';
