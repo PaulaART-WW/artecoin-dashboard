@@ -9380,7 +9380,7 @@ function initCentrosTab(){
   pdps.forEach(function(p){
     var opt=document.createElement('option');
     opt.value=p.codigo;
-    opt.textContent=p.nombre+' ('+p.area+')';
+    opt.textContent=p.codigo || p.nombre || ('#'+p.id);
     sel.appendChild(opt);
   });
   var mieres=DATA.find(function(p){return p.codigo==='10010_26_PR_ED (PD)_ESE_MIERES';});
@@ -10638,31 +10638,40 @@ function _showImportProjectModal(detectedProject){
     modal.addEventListener('mousedown', function(e){ if(e.target===modal) _closeImportModal(); });
     document.getElementById('imp-cancel').addEventListener('click', _closeImportModal);
     document.getElementById('imp-confirm').addEventListener('click', function(){
-      var cod = document.getElementById('imp-proj-sel').value;
+      var pid = parseInt(document.getElementById('imp-proj-sel').value,10);
       var savedFile = _pendingImportFile;   // capture before _closeImportModal clears it
       _pendingImportFile = null;
       modal.style.display = 'none';
-      _continueImportFromModal(cod, savedFile);
+      _continueImportFromModal(pid, savedFile);
     });
   }
 
-  // Populate selector with ED/AP/FV projects
+  // Populate selector con proyectos ED (los mismos que "Proyecto PD"), por id y mostrando el código de carpeta
   var sel2 = document.getElementById('imp-proj-sel');
   sel2.innerHTML = '';
-  var areas = ['ED_ARQ','ED_AUD','AP','FV'];
-  DATA.filter(function(pr){ return !pr.deleted && areas.indexOf(pr.area)>=0; })
-      .sort(function(a,b){ return (a.nombre||'').localeCompare(b.nombre||''); })
+  DATA.filter(function(pr){ return !pr.deleted && pr.area && pr.area.indexOf('ED')===0; })
+      .sort(function(a,b){ return (a.codigo||a.nombre||'').localeCompare(b.codigo||b.nombre||''); })
       .forEach(function(pr){
         var opt = document.createElement('option');
-        opt.value = pr.codigo;
-        opt.textContent = pr.nombre + (pr.codigo?' ('+pr.codigo+')':'');
+        opt.value = String(pr.id);
+        opt.textContent = pr.codigo || pr.nombre || ('#'+pr.id);
         sel2.appendChild(opt);
       });
+  var _ids = Array.prototype.map.call(sel2.options, function(o){return o.value;});
 
-  // Pre-select: detected > current > first
+  // Pre-seleccionar: detectado (o su hermano ED con el mismo nombre) > actual > primero
   var ctrSel = document.getElementById('ctr-selector');
-  var preselect = detectedProject ? detectedProject.codigo : (ctrSel ? ctrSel.value : '');
-  if(preselect) sel2.value = preselect;
+  var preId = '';
+  if(detectedProject){
+    if(_ids.indexOf(String(detectedProject.id))>=0){ preId=String(detectedProject.id); }
+    else {
+      var _sib=DATA.find(function(x){ return !x.deleted && x.area && x.area.indexOf('ED')===0 && (x.nombre||'')===(detectedProject.nombre||''); });
+      if(_sib && _ids.indexOf(String(_sib.id))>=0) preId=String(_sib.id);
+    }
+  }
+  if(!preId && ctrSel && ctrSel.value){ var _cp=DATA.find(function(x){return x.codigo===ctrSel.value;}); if(_cp && _ids.indexOf(String(_cp.id))>=0) preId=String(_cp.id); }
+  if(preId){ sel2.value = preId; }
+  else if(sel2.options.length){ sel2.selectedIndex = 0; }
 
   // Message
   var msgEl = document.getElementById('imp-detected-msg');
@@ -10681,15 +10690,21 @@ function _closeImportModal(){
   _pendingImportFile = null;
 }
 
-function _continueImportFromModal(projectCodigo, file){
+function _continueImportFromModal(projectRef, file){
   if(!file) file = _pendingImportFile;
   _pendingImportFile = null;
   if(!file){ return; }
-  var p = DATA.find(function(x){ return x.codigo === projectCodigo; });
+  var p = DATA.find(function(x){ return x.id === projectRef; })
+       || DATA.find(function(x){ return String(x.id) === String(projectRef); })
+       || DATA.find(function(x){ return x.codigo === projectRef; });
   if(!p){ alert('Proyecto no encontrado.'); return; }
-  // Sync the main selector
+  // Sincronizar el selector "Proyecto PD" si el proyecto está en su lista
   var sel = document.getElementById('ctr-selector');
-  if(sel && sel.value !== p.codigo){ sel.value = p.codigo; renderCentros(); }
+  if(sel){
+    var hasOpt = Array.prototype.some.call(sel.options, function(o){ return o.value===p.codigo; });
+    if(hasOpt && sel.value!==p.codigo){ sel.value = p.codigo; }
+    renderCentros();
+  }
   _runCentrosImport(p, file);
 }
 
