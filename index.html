@@ -3697,17 +3697,24 @@ function clearPlanosEnc(){
 
 /* ─────────────────────────── ENTREGAS TOMA DATOS PICKER ──────────────────────── */
 function buildTdEntregaCell_docs(p){
+  var td = p.toma_datos||{};
   // Check p.entregas_td first (picker writes here), fallback to p.toma_datos.entregas_td
-  var ents = p.entregas_td || (p.toma_datos && p.toma_datos.entregas_td) || [];
+  var ents = p.entregas_td || td.entregas_td || [];
   var legacy = (p.docs_fechas && p.docs_fechas['td_entrega'])||'';
-  if(!ents.length && !legacy) return '⬜';
   var all = ents.slice();
   if(!ents.length && legacy){
-    var lp=legacy.split('|'); all=[{fecha:lp[0],ini:lp[1]||''}];
+    var lp=legacy.split('|'); if(lp[0]) all=[{fecha:lp[0],ini:lp[1]||''}];
   }
+  var emp=td.empresa||'', fit=td.fecha_inicio_trabajo||'', fft=td.fecha_fin_trabajo||'', fep=td.fecha_entrega_prev||'', obs=td.observaciones||'';
+  var hasHeader = !!(emp||fit||fft||fep||obs);
+  if(!all.length && !hasHeader) return '⬜';
+  var html='<span style="display:block;font-size:13px;line-height:1.1">'+(all.length?'✅':'🚗')+'</span>';
+  if(emp) html+='<span style="display:block;font-size:8px;font-weight:700;color:#D97706;line-height:1.3">'+emp+'</span>';
+  if(fit||fft) html+='<span style="display:block;font-size:8px;color:#059669;line-height:1.3">'+(fit||'?')+(fft?'→'+fft:'')+'</span>';
+  else if(fep) html+='<span style="display:block;font-size:8px;color:#6B7280;line-height:1.3">prev '+fep+'</span>';
+  if(!all.length) return html;
   var last=all[all.length-1];
   var pts=last.fecha?last.fecha.split('/'):[]; var sh=pts.length>=2?pts[0]+'/'+pts[1]:'';
-  var html='<span style="display:block;font-size:14px;line-height:1.1">✅</span>';
   if(all.length>1) html+='<span style="display:block;font-size:8px;font-weight:700;color:#155724">'+all.length+' entregas</span>';
   if(sh) html+='<span style="display:block;font-size:9px;color:#555">'+sh+'</span>';
   if(last.ini) html+='<span style="display:block;font-size:9px;font-weight:700;color:#1A56DB">'+last.ini+'</span>';
@@ -6532,7 +6539,9 @@ function _refreshDocsCell(pid){
   var cellEl = document.getElementById('dmc-'+pid+'-td_entrega');
   if(cellEl){
     cellEl.innerHTML = buildTdEntregaCell_docs(p);
-    if(ents.length){ cellEl.style.background='#F0FDF4'; cellEl.style.border='1px solid #86EFAC'; }
+    var _td=p.toma_datos||{};
+    var filled = ents.length || _td.empresa || _td.fecha_inicio_trabajo || _td.fecha_fin_trabajo || _td.fecha_entrega_prev || _td.observaciones;
+    if(filled){ cellEl.style.background='#F0FDF4'; cellEl.style.border='1px solid #86EFAC'; }
     else { cellEl.style.background=''; cellEl.style.border=''; }
   }
 }
@@ -6553,7 +6562,7 @@ function _tdSaveField(pid, field, val){
   else if(field==='fecha_fin_trabajo'){ var pf=val.split('-'); p.toma_datos.fecha_fin_trabajo = pf.length===3?pf[2]+'/'+pf[1]+'/'+pf[0]:''; }
   else if(field==='fecha_entrega_prev'){ var pe=val.split('-'); p.toma_datos.fecha_entrega_prev = pe.length===3?pe[2]+'/'+pe[1]+'/'+pe[0]:''; }
   else if(field==='observaciones'){ p.toma_datos.observaciones = val; }
-  saveData(); _refreshRegistroTDCell(pid);
+  saveData(); _refreshRegistroTDCell(pid); _refreshDocsCell(pid);
 }
 function _tdDocsSetEmp(pid, key, btn){
   pushUndo();
