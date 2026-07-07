@@ -2397,7 +2397,7 @@ function buildTwinRow(p1, p2){
     +   '<span data-obs-id="'+p1.id+'" onclick="openObsSidebar('+p1.id+')" style="font-size:10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-width:88px;max-width:120px;line-height:1.4;white-space:normal;color:#1A56DB;text-decoration:underline dotted;cursor:pointer">'+(lastObs(p1.obs)||'<span style="color:#9CA3AF;font-style:italic">sin obs.</span>')+'</span>'
     +   '<span data-obs-id="'+p2.id+'" onclick="openObsSidebar('+p2.id+')" style="font-size:10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-width:88px;max-width:120px;line-height:1.4;white-space:normal;color:#1A56DB;text-decoration:underline dotted;cursor:pointer">'+(lastObs(p2.obs)||'<span style="color:#9CA3AF;font-style:italic">sin obs.</span>')+'</span>'
     + '</div></td>'
-+ '<td onclick="event.stopPropagation()" style="min-width:78px;vertical-align:top">'+buildTomaDatosCell(p1)+'</td>'
++ '<td onclick="event.stopPropagation()" style="min-width:78px;vertical-align:top">'+stk+buildTomaDatosCell(p1)+buildTomaDatosCell(p2)+'</div></td>'
     + '<td onclick="event.stopPropagation()" style="text-align:center;vertical-align:middle;min-width:52px">'+stk+buildPlanosDocCell(p1)+buildPlanosDocCell(p2)+'</div></td>'
 + buildBillingCell(p1.id)
 + '<td onclick="event.stopPropagation()" style="text-align:center;vertical-align:middle;min-width:52px">'+stk+_calcSummary(p1)+_calcSummary(p2)+'</div></td>'
@@ -3200,10 +3200,10 @@ function buildTomaDatosCell(p){
   var ents=(p.entregas_td||[]);
   var hasData=emp||fv||fit||fft||ents.length;
   if(!hasData){
-    return '<span id="reg-tdc-'+p.id+'" onclick="openTomaDatosPicker('+p.id+',this)" style="color:#9CA3AF;font-size:11px;padding:2px 5px;cursor:pointer;border-radius:4px;border:1px dashed #D1D5DB">+ TD</span>';
+    return '<span id="reg-tdc-'+p.id+'" style="color:#C0C0C0;font-size:11px">—</span>';
   }
   var col=emp==='FISOTEC'?'#059669':emp==='SONINGEO'?'#7C3AED':'#D97706';
-  var html='<div id="reg-tdc-'+p.id+'" class="td-cell-wrap" onclick="openTomaDatosPicker('+p.id+',this)" style="cursor:pointer">';
+  var html='<div id="reg-tdc-'+p.id+'" class="td-cell-wrap" title="Se rellena en Documentación">';
   if(emp) html+='<span class="td-cell-emp" style="background:'+col+'">'+emp+'</span>';
   if(fit||fft) html+='<div class="td-cell-line">📅 '+(fit||'?')+(fft?' → '+fft:'')+'</div>';
   else if(fv) html+='<div class="td-cell-line">📅 '+fv+'</div>';
