@@ -6565,6 +6565,21 @@ function _tdDocsSetEmp(pid, key, btn){
   var descInp = document.getElementById('tdp-docs-otro-desc');
   _tdSaveEmpresa(pid, key, descInp ? descInp.value.trim() : '');
 }
+function _tdDocsGuardar(pid){
+  var p=DATA.find(function(x){return x.id===pid;}); if(!p){closeDocDatePicker();return;}
+  pushUndo();
+  if(!p.toma_datos)p.toma_datos={};
+  function _v(id){var el=document.getElementById(id);return el?el.value:null;}
+  var fit=_v('tdp-fit-'+pid), fft=_v('tdp-fft-'+pid), fep=_v('tdp-fep-'+pid), obs=_v('tdp-obs-'+pid);
+  if(fit!==null) p.toma_datos.fecha_inicio_trabajo = fit?tdFromISO(fit):'';
+  if(fft!==null) p.toma_datos.fecha_fin_trabajo = fft?tdFromISO(fft):'';
+  if(fep!==null) p.toma_datos.fecha_entrega_prev = fep?tdFromISO(fep):'';
+  if(obs!==null) p.toma_datos.observaciones = obs;
+  saveData();
+  _refreshRegistroTDCell(pid);
+  if(typeof _refreshDocsCell==='function') _refreshDocsCell(pid);
+  closeDocDatePicker();
+}
 function _renderEntregasPicker(picker, p){
   var td = p.toma_datos||{};
   var emp = td.empresa||'';
@@ -6612,14 +6627,14 @@ function _renderEntregasPicker(picker, p){
     +'</div>'
     +'<div style="display:flex;gap:8px;margin-bottom:4px">'
     +'<div style="flex:1"><div style="font-size:9px;color:#6B7280;font-weight:600;margin-bottom:1px">Fecha inicio TC</div>'
-    +'<input type="date" value="'+fitISO+'" style="width:100%;border:1.5px solid #C8D9EF;border-radius:4px;padding:3px 5px;font-size:11px;box-sizing:border-box" onchange="_tdSaveField('+p.id+',\'fecha_inicio_trabajo\',this.value)"></div>'
+    +'<input id="tdp-fit-'+p.id+'" type="date" value="'+fitISO+'" style="width:100%;border:1.5px solid #C8D9EF;border-radius:4px;padding:3px 5px;font-size:11px;box-sizing:border-box" onchange="_tdSaveField('+p.id+',\'fecha_inicio_trabajo\',this.value)"></div>'
     +'<div style="flex:1"><div style="font-size:9px;color:#6B7280;font-weight:600;margin-bottom:1px">Fecha fin TC</div>'
-    +'<input type="date" value="'+fftISO+'" style="width:100%;border:1.5px solid #C8D9EF;border-radius:4px;padding:3px 5px;font-size:11px;box-sizing:border-box" onchange="_tdSaveField('+p.id+',\'fecha_fin_trabajo\',this.value)"></div>'
+    +'<input id="tdp-fft-'+p.id+'" type="date" value="'+fftISO+'" style="width:100%;border:1.5px solid #C8D9EF;border-radius:4px;padding:3px 5px;font-size:11px;box-sizing:border-box" onchange="_tdSaveField('+p.id+',\'fecha_fin_trabajo\',this.value)"></div>'
     +'</div>'
     +'<div style="margin-bottom:4px"><div style="font-size:9px;color:#6B7280;font-weight:600;margin-bottom:1px">Fecha prev. entrega</div>'
-    +'<input type="date" value="'+fepISO+'" style="width:100%;border:1.5px solid #C8D9EF;border-radius:4px;padding:3px 5px;font-size:11px;box-sizing:border-box" onchange="_tdSaveField('+p.id+',\'fecha_entrega_prev\',this.value)"></div>'
+    +'<input id="tdp-fep-'+p.id+'" type="date" value="'+fepISO+'" style="width:100%;border:1.5px solid #C8D9EF;border-radius:4px;padding:3px 5px;font-size:11px;box-sizing:border-box" onchange="_tdSaveField('+p.id+',\'fecha_entrega_prev\',this.value)"></div>'
     +'<div style="margin-bottom:6px"><div style="font-size:9px;color:#6B7280;font-weight:600;margin-bottom:1px">Observaciones</div>'
-    +'<textarea rows="2" placeholder="Notas de la toma de datos…" style="width:100%;border:1.5px solid #C8D9EF;border-radius:4px;padding:4px 6px;font-size:11px;box-sizing:border-box;resize:vertical;font-family:inherit" onchange="_tdSaveField('+p.id+',\'observaciones\',this.value)">'+obsEsc+'</textarea></div>'
+    +'<textarea id="tdp-obs-'+p.id+'" rows="2" placeholder="Notas de la toma de datos…" style="width:100%;border:1.5px solid #C8D9EF;border-radius:4px;padding:4px 6px;font-size:11px;box-sizing:border-box;resize:vertical;font-family:inherit" onchange="_tdSaveField('+p.id+',\'observaciones\',this.value)">'+obsEsc+'</textarea></div>'
     +'<label style="display:flex;align-items:center;gap:6px;font-size:11px;cursor:pointer;margin-bottom:8px">'
     +'<input type="checkbox"'+(td.planif_enviada?' checked':'')+' style="width:13px;height:13px;accent-color:#1A56DB" onchange="_tdSaveField('+p.id+',\'planif\',this.checked)">'
     +'<span>Se ha enviado la planificación</span></label>'
@@ -6635,8 +6650,9 @@ function _renderEntregasPicker(picker, p){
     +'<input id="ent-fecha" type="date" style="flex:1;border:1.5px solid #A7F3D0;border-radius:5px;padding:3px 5px;font-size:11px">'
     +'<button id="btn-add-ent-'+p.id+'" onclick="addEntrega('+p.id+',this)" style="background:#059669;color:#fff;border:none;border-radius:5px;padding:3px 7px;font-size:11px;font-weight:700;cursor:pointer">+</button>'
     +'</div></div>'
-    +'<div style="margin-top:8px;text-align:right">'
+    +'<div style="margin-top:8px;display:flex;gap:6px;justify-content:flex-end">'
     +'<button onclick="closeDocDatePicker()" style="background:#F1F5F9;border:none;border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer">Cerrar</button>'
+    +'<button onclick="_tdDocsGuardar('+p.id+')" style="background:#003366;color:#fff;border:none;border-radius:6px;padding:4px 14px;font-size:11px;font-weight:700;cursor:pointer">✓ Guardar</button>'
     +'</div>';
 }
 function saveEntregaRevision(pid, idx, btnEl){
